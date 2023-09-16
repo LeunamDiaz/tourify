@@ -33,7 +33,7 @@
 <nav class="bg-white border-gray-200 dark:bg-gray-900">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     <a href="" class="flex items-center">
-        <img src="logo.png" class="h-12 mr-3" alt="Flowbite Logo" />
+        <img src="images/logo.png" class="h-12 mr-3" alt="Tourify" />
         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
     </a>
     <div class="flex md:order-2">
@@ -45,7 +45,7 @@
           </svg>
       </button>
     </div>
-    <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+   <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
       <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
         <li>
           <a href="index.html" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
@@ -66,19 +66,44 @@
   
 </head>
 <body>
-
+x
     <div id="map"></div>
 
     <script>
 
-        var map = L.map('map').setView([28.635883180385193, -106.06120096244744], 13);
+            var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=yj75lsDgheFJbRZmAjiim07TKAapfZ5oHwT501C8AsBCb8WUuVjShJlyZozGX6Bt', {
+               attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+               minZoom: 0,
+               maxZoom: 22,
+               subdomains: 'abcd',
+            });
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+            var map = L.map('map').setView([28.643951810520395, -106.0729363634578], 15);
+            var circle = L.circle([38.643951810520395, -106.0729363634578], {
+               color: 'red',
+               fillColor: '#f03',
+               fillOpacity: 0.5,
+               radius: 500
+            }).addTo(map);
+            
+
+                        var greenIcon = L.icon({
+               iconUrl: 'images/angel.webp',
+
+               iconSize:     [50, 95], // size of the icon
+               iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+               popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+
+            });
+
+            L.marker([28.643951810520395, -106.072936363457], {icon: greenIcon}).addTo(map)              
+            .bindPopup('<div class="text-center"><img src="images/angel.webp" alt="Angel of independence" class="mx-auto" width="170" /><p>It is one of the most iconic landmarks in Mexico and holds significant historical and cultural importance. The Angel of Independence was constructed in 1910 to commemorate the centennial of Mexico\'s War of Independence against Spanish colonial rule, which began in 1810. The monument stands at the intersection of Paseo de la Reforma and Avenida Insurgentes, two major thoroughfares in Mexico City.</p><a href="tu-enlace-aqui">Click for augmented reality</a></div>');
+
+         
+
+            Jawg_Sunny.addTo(map);
+
     </script>
-
 <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
     <span class="sr-only">Open sidebar</span>
     <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +114,7 @@
  <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
     <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
        <a href="" class="flex items-center pl-2.5 mb-5">
-          <img src="logo.png" class="h-6 mr-3 sm:h-7" alt="Flowbite Logo" />
+          <img src="images/logo.png" class="h-6 mr-3 sm:h-7" alt="Flowbite Logo" />
           <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Tourify</span>
        </a>
        <ul class="space-y-2 font-medium">
