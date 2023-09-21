@@ -29,15 +29,46 @@
     </style>
     
     
-
+ 
+<style>
+    #userDropdown {
+  z-index: 1000; /* Puedes ajustar este valor según sea necesario para que esté por delante de otros elementos */
+}
+</style>
+    
 <nav class="bg-white border-gray-200 dark:bg-gray-900">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
     <a href="" class="flex items-center">
-        <img src="images/logo.png" class="h-12 mr-3" alt="Tourify" />
-        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
+        <img src="images/logo.png" class="h-12 mr-3" alt="" />
     </a>
     <div class="flex md:order-2">
-        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
+        <a>
+
+<div class="flex items-center">
+  <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-full cursor-pointer" src="images/user.png" alt="User dropdown">
+</div>
+
+            <!-- Dropdown menu -->
+            <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                  <div>Traveler</div>
+                  <div class="font-medium truncate"></div>
+                </div>
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                  </li>
+                </ul>
+                <div class="py-1">
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+                </div>
+            </div>
+                        
+        </a>
+         
         <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
           <span class="sr-only">Open main menu</span>
           <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
@@ -45,19 +76,19 @@
           </svg>
       </button>
     </div>
-   <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+    <div class="items-center justify-betw  0een hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
       <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
         <li>
-          <a href="index.html" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
+          <a href="index.html" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" aria-current="page">Home</a>
         </li>
         <li>
-          <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">About</a>
+          <a href="#" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500">Map</a>
         </li>
         <li>
-          <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Services</a>
+          <a href="achievements.html" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Achievements</a>
         </li>
         <li>
-          <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Contact</a>
+          <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Support</a>
         </li>
       </ul>
     </div>
@@ -71,35 +102,66 @@ x
 
     <script>
 
-            var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=yj75lsDgheFJbRZmAjiim07TKAapfZ5oHwT501C8AsBCb8WUuVjShJlyZozGX6Bt', {
-               attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-               minZoom: 0,
-               maxZoom: 22,
-               subdomains: 'abcd',
-            });
+var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=yj75lsDgheFJbRZmAjiim07TKAapfZ5oHwT501C8AsBCb8WUuVjShJlyZozGX6Bt', {
+   attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+   minZoom: 0,
+   maxZoom: 22,
+   subdomains: 'abcd',
+});
 
-            var map = L.map('map').setView([28.643951810520395, -106.0729363634578], 15);
-            var circle = L.circle([38.643951810520395, -106.0729363634578], {
-               color: 'red',
-               fillColor: '#f03',
-               fillOpacity: 0.5,
-               radius: 500
-            }).addTo(map);
-            
+var map = L.map('map').setView([28.643951810520395, -106.0729363634578], 15);
 
-                        var greenIcon = L.icon({
-               iconUrl: 'images/angel.webp',
+var greenIcon = L.icon({
+   iconUrl: 'images/angel.webp',
+   iconSize:     [50, 95],
+   iconAnchor:   [22, 94],
+   popupAnchor:  [-3, -76]
+});
 
-               iconSize:     [50, 95], // size of the icon
-               iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-               popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 
-            });
+var miguelIcon = L.icon({
+   iconUrl: 'images/miguel.png',
+   iconSize:     [50, 70],
+   iconAnchor:   [22, 94],
+   popupAnchor:  [-3, -76]
+});
 
-            L.marker([28.643951810520395, -106.072936363457], {icon: greenIcon}).addTo(map)              
-            .bindPopup('<div class="text-center"><img src="images/angel.webp" alt="Angel of independence" class="mx-auto" width="170" /><p>It is one of the most iconic landmarks in Mexico and holds significant historical and cultural importance. The Angel of Independence was constructed in 1910 to commemorate the centennial of Mexico\'s War of Independence against Spanish colonial rule, which began in 1810. The monument stands at the intersection of Paseo de la Reforma and Avenida Insurgentes, two major thoroughfares in Mexico City.</p><a href="tu-enlace-aqui">Click for augmented reality</a></div>');
+var catedralIcon = L.icon({
+   iconUrl: 'images/catedralmetro.png',
+   iconSize:     [50, 65],
+   iconAnchor:   [22, 94],
+   popupAnchor:  [-3, -76]
+});
 
-         
+var quintagamerosIcon = L.icon({
+   iconUrl: 'images/quintagameros.png',
+   iconSize: [50, 65],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+});
+
+var toucheIcon = L.icon({
+   iconUrl: 'images/touche.png',
+   iconSize: [35, 55],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+});
+
+L.marker([28.640049083221417, -106.07255555462534], { icon: greenIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/angel.webp" alt="Angel of independence" class="mx-auto" width="170" /><p>It is one of the most iconictu-enlace-aqui landmarks in Mexico and holds significant historical and cultural importance. The Angel of Independence was constructed in 1910 to commemorate the centennial of Mexico\'s War of Independence against Spanish colonial rule, which began in 1810. The monument stands at the intersection of Paseo de la Reforma and Avenida Insurgentes, two major thoroughfares in Mexico City.</p><a href="https://safe-unexpected-minute.glith.me">Click here for augmented reality</a></div>');
+
+L.marker([28.639210228660716, -106.07348138681505], { icon: miguelIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/miguel.png" alt="Miguel Image" class="mx-auto" width="170" /><p>El Altar de la Patria. Es el Lugar del Fusilamiento Justo en el patio del Palacio de Gobierno se encuentra el Altar de la Patria, que marca el sitio exacto donde Miguel Hidalgo fue fusilado el 30 de julio de 1811 después de estar preso. Contiene dos esculturas conmovedoras: una de él sentado, con los ojos vendados y esperando recibir los disparos fatales, aún con un crucifijo en la mano; y otra que lo representa de pie arengando al pueblo como el líder carismático que fue. Visitar este altar permite conectarnos con ese pasado heroico y el origen libertario de Chihuahua. Palpar la historia en el mismo lugar donde ocurrió es una experiencia que todo visitante debería vivir. El Altar de la Patria sintetiza el sacrificio de los insurgentes que dieron su vida por la independencia.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+L.marker([28.63593583542254, -106.0770682181641], { icon: catedralIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/catedralmetro.png alt="Angel of independence" class="mx-auto" width="170" /><p>It is one of the most iconic landmarks in Mexico and holds significant historical and cultural importance. The Angel of Independence was constructed in 1910 to commemorate the centennial of Mexico\'s War of Independence against Spanish colonial rule, which began in 1810. The monument stands at the intersection of Paseo de la Reforma and Avenida Insurgentes, two major thoroughfares in Mexico City.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+L.marker([28.632201227660367, -106.07338241751833], { icon: quintagamerosIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/quintagameros.png" alt="Quinta Gameros" class="mx-auto" width="170" /><p>Quinta Gameros is a historic building in Mexico and is known for its architectural beauty and historical significance.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+L.marker([28.634107603028113, -106.07265739274982], { icon: toucheIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/touche.png" alt="Palacio de Gobierno" class="mx-auto" width="170" /><p>The Palacio de Gobierno is an important government building in Mexico. It has historical significance and is a prominent landmark in the city.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
 
             Jawg_Sunny.addTo(map);
 
