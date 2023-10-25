@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tourify</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css"  rel="stylesheet" />
+  <link rel="stylesheet" href="#">
+  <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+</head>
+
+
+
+
+<body class="bg-gray-900">
+  <style>
+    #userDropdown {
+  z-index: 1000; /* Puedes ajustar este valor según sea necesario para que esté por delante de otros elementos */
+  }
+  </style>
+    
+  <nav class="bg-white border-gray-200 dark:bg-gray-900">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <a href="" class="flex items-center">
+        <img src="images/logo.png" class="h-12 mr-3" alt="Flowbite Logo" />
+        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Tourify</span>
+    </a>
+    <div class="flex md:order-2">
+        <a>
+  
+  <div class="flex items-center" >
+  <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-full cursor-pointer" src="images/user.png" alt="User dropdown">
+  </div>
+  
+            <!-- Dropdown menu -->
+            <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                  <div>Traveler</div>
+                  <div class="font-medium truncate"></div>
+                </div>
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                  </li>
+                </ul>
+                <div class="py-1">
+                  <a href="login.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+                </div>
+            </div>
+                        
+        </a>
+         
+        <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
+          <span class="sr-only">Open main menu</span>
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+          </svg>
+      </button>
+    </div>
+    <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+      <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+        <li>
+          <a href="index.html" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-white md:dark:hover:text-blue-500 " aria-current="page">Home</a>
+        </li>
+        <li>
+          <a href="map.html" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Map</a>
+        </li>
+        <li>
+          <a href="achievements.html" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Achievements</a>
+        </li>
+        <li>
+          <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Support</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+  </nav>
+
+
+
+
+  <section class="bg-gray-800">
+    
+
+  <div class="w-full lg:w-1/2 px-1 mx-auto ml-auto pt-0">
+    
+    <div class="relative flex flex-col min-w-0 break-words bg-gray-900 w-full shadow-xl rounded-lg">
+      <div class="px-4">
+        <div class="flex flex-wrap justify-center">
+          <div class="w-full px-0 flex justify-center">
+            <div class="full">
+              <img class="rounded-full w-48 h-48 mt-11" src="images/traveler.png.jpg" alt="Extra large avatar">
+            </div>
+          </div>
+          <div class="w-full px-4 text-center mt-5 text-white">
+            <div class="flex justify-center ml-6">
+              <div class="mr-4 p-3 text-center">
+                <span class="text-xl font-bold block uppercase tracking-wide text-white">
+                  22
+                </span>
+                <span class="text-sm text-white">Cards</span>
+              </div>
+              <div class="mr-4 p-3 text-center">
+                <span class="text-xl font-bold block uppercase tracking-wide text-white">
+                  10
+                </span>
+                <span class="text-sm text-white">Achievements</span>
+              </div>
+              <div class="lg:mr-4 p-3 text-center text-white">
+                <span class="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
+                  89
+                </span>
+                <span class="text-sm text-white">Comments</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4 justify-center">
+          <h2 class="text-xl font-bold leading-normal text-white">
+            User Name
+          </h2>
+          <h3 class="text-xl font-semibold leading-normal mb-2 text-white mb-2">
+            Dafnis Villagran
+          </h3>
+          <h2 class="text-xl font-bold leading-normal text-white">
+            Email
+          </h2>
+          <h3 class="text-xl font-semibold leading-normal mb-2 text-white mb-2">
+            dafnisvillagran@gmail.com
+          </h3>
+          <h2 class="text-xl font-bold leading-normal text-white">
+            City
+          </h2>
+          <div class="text-sm leading-normal mt-0 mb-2 text-white font-bold uppercase">
+
+            <i class="fas fa-map-marker-alt mr-2 text-lg text-white"></i>
+            Chihuahua, Chihuahua
+          </div>
+
+        </div>
+        <div class="mt-6 py-6 border-t border-blueGray-200 text-center">
+          <div class="flex flex-wrap justify-center">
+            <div class="w-full lg:w-9/12 px-4">
+              <a href="javascript:void(0);">
+                <button type="button" class="px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-900">Edit Profile</button>
+                </a>
+                <button type="button" class="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-gray-900 rounded-lg border border-blue-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+                  Save Changes
+                </button>  
+              <a href="javascript:void(0);" ></a>
+              <button type="button" class="px-5 py-3 text-base font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-blue-900">Delete Profile</button>
+
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+  
+</body>
+
