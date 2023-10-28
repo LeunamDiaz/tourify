@@ -30,7 +30,7 @@ process.on(`SIGINT`, () => {
     });
 });
 
-router.get('/login', (req, res) => {
+router.get('/', (req, res) => {
     res.render('login.ejs');
 });
 

@@ -159,4 +159,4 @@
 	100% {
 		transform: translateX(calc(-1 * var(--fPos)));
 	}
-}
+};
