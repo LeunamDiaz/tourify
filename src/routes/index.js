@@ -102,12 +102,16 @@ router.get('/home', (req, res) => {
     res.render('index.ejs');
 });
 
-router.post('/register', (req, res) => {
-    // ... El código para registrar usuarios
+router.get('/map', (req, res) => {
+    res.render('map.ejs')
 });
 
-router.post('/home', (req, res) => {
-    // ... El código para el inicio de sesión
+router.get('/achievements', (req, res) => {
+    res.render('achievements.ejs')
 });
+
+router.get('/admin', (req, res) => {
+    res.render('admin.ejs')
+})
 
 module.exports = router;
