@@ -68,6 +68,9 @@
                     <div class="pb-2 pt-4">
                         <input class="block w-full p-4 text-lg rounded-sm bg-black" type="password" name="password" id="password" placeholder="Password">
                     </div>
+                    <div class="pb-2 pt-4">
+                        <input class="block w-full p-4 text-lg rounded-sm bg-black" type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password">
+                    </div>
                     <div class="px-4 pb-2 pt-4">
                         <button type="submit" class="uppercase block w-full p-4 text-lg rounded-full bg-blue-700 hover:bg-blue-800 focus:outline-none">Register</button>
                     </div>
@@ -76,6 +79,27 @@
                             <button type="button" class="uppercase block w-full p-4 text-lg rounded-full bg-blue-700 hover:bg-blue-800 focus:outline-none">Login</button>
                         </a>
                     </div>
+                    <% if (typeof emailRegistrado !== 'undefined' && emailRegistrado) { %>
+                        <p><div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                            <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                              <span class="font-medium">Oooh crap!</span> Looks like that email it's already registered! Try with another email.
+                            </div>
+                          </div></p>
+                      <% } else if (typeof errorInterno !== 'undefined' && errorInterno) { %>
+                        <p><div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                            <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                              <span class="font-medium">My bad my bad!</span> I can't save that information, try again!
+                            </div>
+                          </div></p>  
+                      <% } %>
                 </form>
             </div>
         </div>
