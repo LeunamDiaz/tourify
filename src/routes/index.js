@@ -59,54 +59,57 @@ router.get('/admin', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
+    const name = req.body.name;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+    const email = req.body.email;
 
-  const name = req.body.name;
-  const password = req.body.password;
-  const email = req.body.email;
+    // Inicializar variables de estado
+    let emailRegistrado = false;
+    let contraseñaNoCoincide = false;
+    let errorInterno = false;
+    let successMessage = false;
 
-  let emailRegistrado = false;
-  let errorInterno = false;
-  let successMessage = false;
+    // Verificar si las contraseñas coinciden
+    const passwordsMatch = (password === confirmPassword);
 
-  // Verificar correo
-  const checkEmailSQL = 'SELECT * FROM users WHERE email = ?';
-  
-  db.query(checkEmailSQL, [email], (error, results) => {
-      if (results.length > 0) {
-          emailRegistrado = true;
-          console.log('Email ya registrado');
-          // Renderizar vista con variables
-          res.render('register', {
-              emailRegistrado,
-              errorInterno 
-          });
-      } else {
-          // Intentar insertar 
-          const registerSQL = 'INSERT INTO users(name, email, password) VALUES (?,?,?)';
-          const valores = [name, email, password];
-      
-          db.query(registerSQL, valores, (error, resultado) => {
-              if (error) {
-                  errorInterno = true;
-                  console.log('Error al insertar usuario: ' + error.message);
-                  // Renderizar vista con variables
-                  res.render('register', {
-                      emailRegistrado,
-                      errorInterno 
-                  });
-              } else {
-                  // Redirigir a otra página si todo sale bien
-                  
-                  res.redirect('/login', ({ successMessage })); // Reemplaza '/otra_pagina' con la ruta real
-              }
-          });
-      }
-  });
+    if (!passwordsMatch) {
+        contraseñaNoCoincide = true;
+        console.log('Las contraseñas no coinciden');
+        res.render('register', { contraseñaNoCoincide })
+    }
+
+    // Verificar si el correo ya está registrado
+    const checkEmailSQL = 'SELECT * FROM users WHERE email = ?';
+    db.query(checkEmailSQL, [email], (error, results) => {
+        if (error) {
+            errorInterno = true;
+            console.log('Error en la consulta de correo: ' + error.message);
+            res.render('register', { errorInterno });
+        } else {
+            if (results.length > 0) {
+                emailRegistrado = true;
+                console.log('Email ya registrado');
+                res.render('register', { emailRegistrado });
+            } else {
+                // Intentar insertar un nuevo usuario
+                const registerSQL = 'INSERT INTO users (name, email, password) VALUES (?,?,?)';
+                const valores = [name, email, password];
+                db.query(registerSQL, valores, (error, resultado) => {
+                    if (error) {
+                        errorInterno = true;
+                        console.log('Error al insertar usuario: ' + error.message);
+                        res.render('register', { errorInterno });
+                    } else {
+                        successMessage = true;
+                        res.render('login', { successMessage });
+                    }
+                });
+            }
+        }
+    });
 });
 
-
-// controlador
-// Rutas login
 router.post('/login', (req, res) => {
 
     const email = req.body.email;
