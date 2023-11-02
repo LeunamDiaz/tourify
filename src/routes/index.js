@@ -76,8 +76,8 @@ router.post('/register', (req, res) => {
     if (!passwordsMatch) {
         contraseñaNoCoincide = true;
         console.log('Las contraseñas no coinciden');
-        res.render('register', { contraseñaNoCoincide })
-    }
+        return res.render('register', { contraseñaNoCoincide });
+    };
 
     // Verificar si el correo ya está registrado
     const checkEmailSQL = 'SELECT * FROM users WHERE email = ?';
@@ -111,7 +111,6 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-
     const email = req.body.email;
     const password = req.body.password;
   
@@ -126,7 +125,7 @@ router.post('/login', (req, res) => {
   
       if(!results || results.length === 0) {
         errorEmail = true;
-        res.redirect('/', ({ errorEmail }));
+        res.render('login', ({ errorEmail }));
       } else {
   
         // Verificar contraseña si el email existe
@@ -138,11 +137,11 @@ router.post('/login', (req, res) => {
           if (error) {
             // Error del servidor
             errorServidor = true;
-            res.redirect('/', ({ errorServidor }));
+            res.render('login', ({ errorServidor }));
           } else if (resultado.length === 0) {
             // Contraseña incorrecta
             errorPassword = true; 
-            res.redirect('/', ({ errorPassword }));
+            res.render('login', ({ errorPassword }));
           } else {
             // Login correcto
             res.redirect('/homeu');
