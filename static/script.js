@@ -33,3 +33,20 @@ function addMarker() {
     // refresh map
     initMap();
   }
+  var dismissButtons = document.querySelectorAll(".dismiss-button"); // Seleccionamos los botones dentro de elementos con la clase "dismiss-button"
+
+  function closeError(event) {
+      // Obtén el elemento padre del botón de dismiss
+      var errorDiv = event.target.closest(".dismiss-button");
+  
+      // Verifica si se encontró el elemento padre
+      if (errorDiv) {
+          // Oculta el elemento padre
+          errorDiv.style.display = "none";
+      }
+  }
+  
+  // Agrega un controlador de eventos a cada botón de dismiss
+  dismissButtons.forEach(function(button) {
+      button.addEventListener("click", closeError);
+  });

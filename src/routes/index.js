@@ -64,13 +64,13 @@ router.post('/register', (req, res) => {
     const confirmPassword = req.body.confirmPassword;
     const email = req.body.email;
 
-    // Inicializar variables de estado
+    // Inicializar variables de estado *Agregue esto Dani
     let emailRegistrado = false;
     let contraseñaNoCoincide = false;
     let errorInterno = false;
     let successMessage = false;
 
-    // Verificar si las contraseñas coinciden
+    // Verificar si las contraseñas coinciden *Agregue esto Dani
     const passwordsMatch = (password === confirmPassword);
 
     if (!passwordsMatch) {
@@ -117,6 +117,12 @@ router.post('/login', (req, res) => {
     let errorEmail = false; 
     let errorPassword = false;
     let errorServidor = false;
+    let datosVacios = false;
+    //Agregue esto Dani
+    if(!email || !password) {
+        datosVacios = true;
+        res.render('login', ({ datosVacios }))
+    }
   
     // Verificar solo el email
     const checkEmailSQL = 'SELECT * FROM users WHERE email = ?';
