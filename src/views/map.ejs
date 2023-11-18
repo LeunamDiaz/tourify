@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Tourify</title>
+   <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+    
+    <link rel="website icon" type="png" href="../../static/images/logo.png">
+   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+        <script src="geolet.js"></script>
+
+
+
+        <!-- Especificaciones para el mapa -->
+   <style>
+
+nav {
+  position: relative;
+  z-index: 1000; /* Puedes ajustar este valor según sea necesario */
+}
+
+#map {
+   width: 100%;
+   height: 89.3vh;
+   position: fixed;
+   bottom: 0;
+   
+}
+@media (max-width: 768px) {
+   #map {
+       width: 100%; 
+       height: 89.3vh;
+   }
+}
+   </style>
+   
+   
+
+<style>
+</style>
+
+
+<!-- NAVBAR de la pagina -->   
+<nav id="nav" class="bg-white border-gray-200 dark:bg-gray-900">
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+  <a href="" class="flex items-center">
+      <img src="../../static/images/logo.png" class="h-12 mr-3" alt="Flowbite Logo" />
+      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Tourify</span>
+  </a>
+  <div class="flex md:order-2">
+      <a>
+
+<div class="flex items-center">
+<img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-full cursor-pointer" src="../../static/usersimages/<%= img[0].image %>" alt="User dropdown">
+</div>
+
+          <!-- Dropdown menu -->
+          <div id="userDropdown" class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+              <div class="px-4 py-3 text-sm text-gray-900 dark:text-white text-center">
+                <div>| <%= img[0].name %> |</div>
+                <div class="font-medium truncate"></div>
+              </div>
+              <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                <li>
+                  <a href="/profile" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+                </li>
+                <li>
+                  <a href="/profile#bottom" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Support</a>
+                </li>
+              </ul>
+              <div class="py-1">
+                <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+              </div>
+          </div>
+                      
+      </a>
+       
+      <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+        </svg>
+    </button>
+  </div>
+  <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+    <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+      <li>
+        <a href="/homeu" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" aria-current="page">Home</a>
+      </li>
+      <li>
+        <a href="/map" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500">Map</a>
+      </li>
+      <li>
+        <a href="/achievements" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Achievements</a>
+      </li>
+      <li>
+        <a href="/events" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Events</a>
+      </li>
+    </ul>
+  </div>
+  </div>
+</nav>
+ 
+</head>
+
+
+<!-- Configuraciones del mapa -->
+ 
+  <div id="map"></div>
+
+   <script>
+
+var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=yj75lsDgheFJbRZmAjiim07TKAapfZ5oHwT501C8AsBCb8WUuVjShJlyZozGX6Bt', {
+   attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+   minZoom: 0,
+   maxZoom: 22,
+   subdomains: 'abcd',
+});
+
+
+var map = L.map('map', {
+    zoomControl: false  // Desactiva los controles de zoom
+}).setView([28.643951810520395, -106.0729363634578], 15);
+
+
+var greenIcon = L.icon({
+   iconUrl: '   https://cdn-icons-png.flaticon.com/512/3655/3655039.png ',
+   iconSize:     [50, 50],
+   iconAnchor:   [22, 94],
+   popupAnchor:  [-3, -76]
+});
+
+var catedralIcon = L.icon({
+   iconUrl: '  https://cdn-icons-png.flaticon.com/512/3893/3893557.png',
+   iconSize:     [35, 35],
+   iconAnchor:   [22, 94],
+   popupAnchor:  [-3, -76]
+});
+
+
+
+var eventIcon = L.icon({
+   iconUrl: '   https://cdn-icons-png.flaticon.com/512/1968/1968779.png ',
+   iconSize: [30, 30],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+   
+});
+
+var quintagamerosIcon = L.icon({
+   iconUrl: '   https://cdn-icons-png.flaticon.com/512/948/948036.png ',
+   iconSize: [32, 32],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+});
+
+var toucheIcon = L.icon({
+   iconUrl: ' https://cdn-icons-png.flaticon.com/512/1044/1044002.png',
+   iconSize: [35, 40],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+});
+
+
+// Marcadores que aparecen en el mapa
+
+var marker = L.marker([28.640049083221417, -106.07255555462534], { icon: greenIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/angel.webp" alt="Angel of independence" class="mx-auto" width="170" /><p>It is one of the most iconictu-enlace-aqui landmarks in Mexico and holds significant historical and cultural importance. The Angel of Independence was constructed in 1910 to commemorate the centennial of Mexico\'s War of Independence against Spanish colonial rule, which began in 1810. The monument stands at the intersection of Paseo de la Reforma and Avenida Insurgentes, two major thoroughfares in Mexico City.</p><a href="https://safe-unexpected-minute.glith.me">Click here for augmented reality</a></div>');
+
+var marker = L.marker([28.639210228660716, -106.07348138681505], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/miguel.png" alt="Miguel Image" class="mx-auto" width="170" /><p>El Altar de la Patria. Es el Lugar del Fusilamiento Justo en el patio del Palacio de Gobierno se encuentra el Altar de la Patria, que marca el sitio exacto donde Miguel Hidalgo fue fusilado el 30 de julio de 1811 después de estar preso. Contiene dos esculturas conmovedoras: una de él sentado, con los ojos vendados y esperando recibir los disparos fatales, aún con un crucifijo en la mano; y otra que lo representa de pie arengando al pueblo como el líder carismático que fue. Visitar este altar permite conectarnos con ese pasado heroico y el origen libertario de Chihuahua. Palpar la historia en el mismo lugar donde ocurrió es una experiencia que todo visitante debería vivir. El Altar de la Patria sintetiza el sacrificio de los insurgentes que dieron su vida por la independencia.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+var marker = L.marker([28.63593583542254, -106.0770682181641], { icon: catedralIcon }).addTo(map)
+  .bindPopup('<a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-center">La Catedral</a>   <div class="text-center"><img src="../../static/imageshistoricals/catedral.jpg" alt="Angel of independence" class="mx-auto" width="170" /><p>It is one of the most iconic landmarks in Mexico and holds significant historical and cultural importance.</p><a href="/historicals">Presiona para ver mas información</a></div>');
+
+var marker = L.marker([28.632201227660367, -106.07338241751833], { icon: quintagamerosIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/quintagameros.png" alt="Quinta Gameros" class="mx-auto" width="170" /><p>Quinta Gameros is a historic building in Mexico and is known for its architectural beauty and historical significance.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+var marker = L.marker([28.634107603028113, -106.07265739274982], { icon: eventIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="Palacio de Gobierno" class="mx-auto" width="170" /><p>The Palacio de Gobierno is an important government building in Mexico. It has historical significance and is a prominent landmark in the city.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.638855203246987, -106.07567287514694], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="La Casa de Juárez" class="mx-auto" width="170" /><p>El museo de la Lealtad Republicana, mejor conocido como la Casa de Juárez, se encuentra en la esquina de las calles Juárez y Quinta, en el centro histórico de la ciudad de Chihuahua; sede del Poder Ejecutivo de México por más de dos años, lugar histórico donde gobernó el presidente Juárez en su peregrinar por el país, llegando con parte de su gabinete a tierra de ‘‘hombres bárbaros‘‘, que más que bárbaros en el sentido despectivo de la palabra, resultaron ser una sociedad, educada, noble, valiente, leal y hospitalaria. En el museo de la Lealtad Republicana (Casa de Juárez) en Chihuahua se pueden admirar los muebles de la época, que fueron utilizados por el Benemérito, ahí permanecen los documentos propios a las comunicaciones escritas que Benito Juárez tenía con los diferentes protagonistas de la historia de la época de la Reforma, instrumentos de trabajo y, sobre todo, la réplica del carruaje que trasladó al presidente Juárez se encuentran en este hermoso lugar de patio interior y construcción de adobe. El edificio se construyó para dar cabida a las oficinas del Gobierno del Estado, quien generosamente lo entregó al Presidente de la República, convirtiéndose por ese solo hecho en digno Palacio Nacional, por el tiempo que duró en Chihuahua nuestro distinguido huésped, ahí mismo se acondicionó la residencia de Benito Juárez; posteriormente fue utilizado como escuela de educación primaria, se convirtió en un museo que por muchos años, y hoy todavía, se le conoce como la Casa de Juárez, para que finalmente mudara su nombre y se acondicionara el museo de la Lealtad Republicana, que es su nombre correcto.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.634279183423377, -106.0707891], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="¿CAPILLA, MAUSOLEO O CENOTAFIO? " class="mx-auto" width="170" /><<p>Francisco Villa mandó construir un espacio donde descansarían para siempre sus restos mortales, un lugar digno para un gran personaje, el monumento mortuorio se edificó entre los años de 1913 y 1914 en el panteón de Nuestra Señora de la Regla, hoy convertido en el parque Revolución. Villa era un hombre previsor, junto al cenotafio, en el panteón de la Regla, mirando de frente el edificio, a su lado izquierdo, mandó construir el monumento mortuorio, que estaba destinado a guardar los cuerpos de los generales que habían combatido a su lado, sólo dos de ellos fueron sepultados ahí Toribio Ortega y Trinidad Rodríguez. El cenotafio del que hablamos combina varios estilos de construcción, que a decir de un experto va del neoclásico al gótico, con sus ventanas ojivales que rematan con arcos árabes tipo mezquita, tiene una torre y un campanario; éste, adornado con flores de Liz en el arco, símbolo de la realeza francesa; ubicados en la parte central del edificio, las columnas que parecen griegas con basamentos barrocos, capiteles con volutas dóricas, con adornos de rosas y cintillos con petunias, blasones con hojas de lino, que usaban los faraones para refrescarse. Al interior del edificio, un ángel y un féretro hechos de mármol, cuando todo el edificio es de cantera, hay también cruces gamadas adornando unas repisas, cruces que los alemanes utilizaron en los tanques de guerra, uvas y caireles adornando el espacio.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.639775466814818, -106.07392409048974], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="LA CASA CHIHUAHUA CENTRO DE PATRIMONIO CULTURAL (PALACIO FEDERAL) " class="mx-auto" width="170" /><p>El Colegio de Jesuitas, hoy Palacio Federal es uno de los edificios con mayor antigüedad en la ciudad de Chihuahua; sus inicios se remontan al año de 1718, tiempo que ha sido testigo de grandes acontecimientos acecidos en nuestra querida ciudad capital. Dentro de sus instalaciones se encontraba el templo de Nuestra Señora de Loreto, pudiéramos decir que actualmente es el único vestigio de sus edificios, porque la torre izquierda del templo que se utilizó como cárcel para Miguel Hidalgo sigue ahí tal y como era en aquellos tiempos, hoy le llamamos el calabozo de Hidalgo. En 1865 durante la estancia del presidente Juárez en Chihuahua, el colegio y el convento de San Francisco se vendieron al señor José Cordero Zuza, posteriormente el gobierno del estado recuperó el colegio, el terreno se dividió y se construyó el Palacio del Gobierno del Estado; y posteriormente, en 1910, se levanta el edificio actual, el Palacio Federal que se usó como sede de varias oficinas federales, con 5,521 metros cuadrados de construcción y una altura de 14. Casa Chihuahua Centro de Patrimonio Cultural es el primer espacio cultural en su género, al ser concebido como un centro referencial del patrimonio del estado. </p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.63675333357773, -106.07425182515009], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="EL TEATRO DE LA CIUDAD " class="mx-auto" width="170" /><p>En el siglo XIX, el Teatro Betancourt, construido por Don Miguel Betancourt, fue un importante lugar cultural en Chihuahua. Aquí se presentaron diversas formas de entretenimiento, desde zarzuelas hasta óperas y películas. Después de la muerte de Betancourt, el teatro fue vendido y rebautizado como Teatro Centenario en 1910. Este nuevo teatro fue popular y acogió una amplia variedad de eventos, incluyendo cine, box y lucha libre. Sin embargo, en 1938, el Teatro Centenario sufrió un incendio y quedó reducido a su fachada. Luego, en 1947, se inauguró el Cine Colonial en el mismo lugar, que se convirtió en un importante centro de entretenimiento en Chihuahua. Con el tiempo, el cine perdió su popularidad y fue comprado por Salinas Pliego, quien lo transformó en una tienda. Finalmente, en el año 2000, con fondos públicos, el edificio fue restaurado y se convirtió en el moderno y versátil Gran Teatro de la Ciudad de Chihuahua. Este proceso de transformación del espacio teatral a lo largo de los años refleja la importancia de la cultura y las artes en la historia de la ciudad.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.653085367537734, -106.08435655352973], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="EL TEATRO DE LOS HÉROES " class="mx-auto" width="170" /><p>En 1901, se inauguró el antiguo Teatro de los Héroes en Chihuahua, México, que honraba a tres personajes históricos: Miguel Hidalgo, Benito Juárez y Porfirio Díaz. El teatro fue testigo de eventos significativos, como el juicio y condena a muerte del general Felipe Ángeles. Sin embargo, en 1955, el teatro sufrió un incendio y cerró. Durante los siguientes 25 años, artistas utilizaron recintos alternativos en la ciudad. En 1980, el político Manuel Bernardo Aguirre inauguró un nuevo y moderno Teatro de los Héroes, junto con un complejo cultural. El teatro se construyó en terrenos que habían sido un antiguo cementerio. A pesar de algunas historias inquietantes sobre huesos humanos encontrados durante la construcción, el nuevo teatro se convirtió en un lugar destacado para eventos culturales y políticos. </p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.62950763849901, -106.06845175384157], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="CASA DE VILLA / QUINTA LUZ/MUSEO HISTÓRICO DE LA REVOLUCIÓN MEXICANA" class="mx-auto" width="170" /><p>La vida de doña Luz Corral de Villa, la esposa de Francisco Villa, y su dedicación a preservar la memoria y legado de Villa. Durante casi 60 años, doña Luz vivió en la casa que su esposo le había adquirido y remodelado, llamándola "Quinta Luz" en su honor. Ella mantuvo la propiedad y el honor de Villa, conversando con personas sobre los días de la Revolución y creando un modesto museo. Después de su fallecimiento en 1981, la casa se convirtió en el Museo Histórico de la Revolución Mexicana, exhibiendo objetos personales de Villa y doña Luz, muebles de la época, armas, y el automóvil en el que Villa fue asesinado. El museo ha recibido numerosos visitantes interesados en la historia de Villa y su legado./p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([19.683395816504618, -99.11982718892396], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="EL MUSEO DEL MAMUT" class="mx-auto" width="170" /><p>El museo se originó a principios del siglo XX cuando un gobernador conocedor de la historia creó una exposición de minerales y fósiles en una escuela desocupada. Posteriormente, en 2004, el edificio de la escuela se convirtió en el "museo del mamut", gestionado por una asociación civil de paleontología. El museo alberga fósiles con millones de años de antigüedad, incluido un esqueleto de ballena gris de mil años, y ofrece exhibiciones relacionadas con la historia del estado de Chihuahua, desde su pasado marino hasta la llegada de los menonitas. El autor anima a los lectores a visitar el museo y compartir la experiencia con sus hijos y nietos, destacando la emoción que generará en las generaciones más jóvenes.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([27.528777844864926, -107.75576784063112], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="LAS BARRANCAS DE CHIHUAHUA " class="mx-auto" width="170" /><p>La majestuosidad de la Sierra Madre Occidental en Chihuahua, México, con sus altas montañas, formaciones rocosas, barrancas, cascadas y bosques de pinos. También menciona la cultura tarahumara que ha prosperado en la región. Se destacan varias de las impresionantes barrancas de Chihuahua, incluyendo la Barranca de Urique, la Barranca de la Sinforosa, la Barranca de Batopilas, la Barranca de Candameña, la Barranca de Huápoca, la Barranca de Chínipas, la Barranca de Oteros, la Barranca de Tarerecua y la Barranca del Cobre. Cada una de estas barrancas tiene sus propias características únicas y se describen brevemente en términos de su profundidad y ubicación.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([31.140733717631957, -106.90008589185621], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="LOS MÉDANOS DE SAMALAYUCA " class="mx-auto" width="170" /><p>El desierto de Samalayuca, situado a 50 kilómetros al sur de la Heroica Ciudad Juárez, ha sido escenario de varias películas, incluyendo "Simón del Desierto," "El Topo," "Dune," y "Conan, el Destructor." El nombre "Samalayuca" proviene de la lengua náhuatl y significa "lugar de arbustos rodeados de arena." Este desierto es un área de protección de flora y fauna y abastece de agua a la ciudad de Juárez a través de un acueducto. Además de ser un lugar de filmación y conservación, las dunas de Samalayuca son ideales para deportes extremos como el deslizamiento en arena, motociclismo, cuatrimotos y más. También alberga petrograbados antiguos que muestran la huella de antiguos habitantes del desierto. Una visita a Samalayuca es una oportunidad para experimentar la naturaleza y la historia en este impresionante paisaje desértico.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([26.693414502565943, -103.74569695235233], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="LA ZONA DEL SILENCIO" class="mx-auto" width="170" /><p>La Zona del Silencio es una reserva de 103,000 hectáreas en Chihuahua, México, famosa por sus misterios. Entre los enigmas se incluyen la pérdida de frecuencias de radio y comunicación, alta radiación solar, plantas y animales con características únicas, y la atracción de meteoritos. La zona se hizo famosa después de que un misil estadounidense se "desviara" allí en 1970, generando rumores de un OVNI. Científicos extranjeros, respaldados por el ejército de EE. UU. y autorizados por México, realizaron operaciones secretas en el área. Los visitantes experimentan interrupciones de radio, desorientación de brújulas y fenómenos extraños. Aunque algunos visitan por curiosidad, otros lo hacen con fines científicos. Se recomienda explorar la zona con un guía como Benjamín Palacios Perches, quien conoce bien la región y ofrece comodidades de hospedaje y comida. </p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.805926685738186, -106.48252873746013], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="EL PARQUE NACIONAL CUMBRES DE MAJALCA" class="mx-auto" width="170" /><p>Muy cerca de la ciudad de Chihuahua, a 75 kilómetros con rumbo al norte, se encuentra un lugar paradisiaco para quienes aman el contacto con la naturaleza, el bosque en toda la extensión y en toda su expresión, residencias de descanso y áreas para acampar, un risueño río, veredas para pasear, plantas, piedras, animales y mucho más, todo eso es Majalca. Hoy en día, Majalca se ha convertido en un lugar privilegiado para los amantes del ciclismo de montaña, es común ver a los ciclistas que por diversión o por hacer ejercicio hacen una travesía que inicia en el parque del Reliz, cercano a la presa del Rejón al noroeste de la ciudad, hasta culminar en un lugar lleno de pinos, para respirar el aire fresco.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.70950153417381, -106.07683906165141], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="LAS GRUTAS DE NOMBRE DE DIOS " class="mx-auto" width="170" /><p>La transformación de las Grutas de Nombre de Dios en Chihuahua, que pasaron de estar abandonadas y peligrosas a convertirse en un atractivo turístico gracias a la colaboración entre la Universidad Autónoma de Chihuahua, el Gobierno del Estado y la Presidencia Municipal. La iniciativa fue impulsada por grupos ecologistas y culminó con la firma de un convenio en 1999. Después de varios años de esfuerzo, el proyecto se inauguró el 25 de octubre de 2000 con la asistencia de autoridades y la comunidad. El texto destaca las diversas formaciones dentro de las grutas, algunas descubiertas más recientemente, y menciona en tono humorístico el "Salón del Resbaladero", un secreto divertido relacionado con las autoridades que visitaron el lugar antes de su acondicionamiento. En la actualidad, la empresa de turismo Chihuahua Bárbaro realiza visitas guiadas a las grutas, incluyendo presentaciones de artistas locales que agregan valor a la experiencia turística.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([27.868923481701483, -106.71146970586095], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="EL CAÑÓN DE NAMÚRACHI" class="mx-auto" width="170" /><p>El cañón de Namúrachi, ubicado en la sierra de Chihuahua, es una maravilla natural con altas paredes de piedra y cuevas. Se cree que el santo San Pedro de Jesús Maldonado celebraba misas clandestinas en este lugar durante la época de la prohibición de cultos. El cañón es también conocido por leyendas, como la del tesoro de los gigantes. Se dice que antiguos habitantes, como los tarahumaras, se refugiaban en las cuevas, que según la leyenda, eran casas de gigantes extintos. Aunque hay historias de personas buscando tesoros, el más valioso se cree que son las riquezas de los gigantes. El cañón es un lugar popular para visitar, con áreas para acampar y actividades familiares, y ha sido escenario de conciertos gracias a su acústica única. </p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.6307502185775, -106.07455132212631], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="EL PARQUE LERDO " class="mx-auto" width="170" /><p>La importancia del Parque Lerdo de Tejada en el desierto del norte de México, especialmente para los habitantes de la región. El parque es considerado como un oasis en medio del desierto y tiene un significado especial en la historia local. Se menciona que el parque es un lugar de convivencia familiar, frecuentado por diversas personas, desde familias hasta parejas de enamorados y niños. Se relata la evolución histórica del parque, desde su inauguración en 1869 hasta la actualidad, destacando la presencia de monumentos y bustos de figuras importantes. Además, se resalta la belleza, limpieza y seguridad del parque en la actualidad. </p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.636448177042826, -106.076655236341], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="LA PLAZA DE ARMAS" class="mx-auto" width="170" /><p>La plaza de Armas tiene una historia que se remonta a 1708-1709, cuando se trazó, pero su construcción tardó varios años. La planificación siguió la tradición del virreinato, privilegiando la Casa Real, el templo y la plaza pública. La Casa Real garantizaba la seguridad, el templo imponía la religión católica a los aborígenes, y la plaza servía como espacio comunitario. Inicialmente utilizado para corridas de toros, en 1836 se construyó la primera plaza de toros. A lo largo de los años, la plaza ha tenido diferentes nombres, pero siempre se le conoce como la "plaza de Armas". Destaca un kiosco central adquirido en 1887, considerado el más hermoso del mundo. La plaza también cuenta con esculturas, gárgolas, lámparas eléctricas y vestigios históricos, como una placa de fierro y una estatua de Antonio de Deza y Ulloa. En la esquina de la Catedral, un barandal revela las tres etapas del pavimento de las calles desde 1792.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([28.640262539250497, -106.08643207370582], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="EL PALOMAR" class="mx-auto" width="170" /><p>Antes, era conocido por sus grandes paredes de tierra que albergaban palomas y por ser la parte más antigua de la ciudad. Sin embargo, con el tiempo, se volvió peligroso y el ayuntamiento decidió transformarlo radicalmente. Se llevó a cabo un plan para negociar terrenos, derribar edificaciones, abrir calles y construir un hermoso parque. El cambio fue significativo, y ahora el Palomar cuenta con diversas atracciones como un kiosco, estatuas, un museo del agua, entre otros. Aunque el antiguo barrio desapareció, aún viven familias que recuerdan los tiempos pasados, pero reconocen la gran diferencia y mejora en la actualidad.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+  var marker = L.marker([30.367644641032896, -107.94856724624518], { icon: toucheIcon }).addTo(map)
+  .bindPopup('<div class="text-center"><img src="../images/touche.png" alt="PAQUIMÉ " class="mx-auto" width="170" /><p>Paquimé, también conocido como "las casas grandes", es un sitio arqueológico en el norte de México, destacado por sus construcciones de hasta cuatro pisos donde vivían hasta tres mil personas. Es un enigma en proceso de descubrimiento, con un valor cultural inscrito en la lista del Patrimonio Mundial de la UNESCO desde 1998. Funcionó como centro ceremonial y ruta comercial entre América del Norte y Mesoamérica, con influencias culturales variadas. Su manejo avanzado del agua, sistema de drenaje y complejas unidades habitacionales lo hacen único. Además, posee características mesoamericanas y de pueblos del desierto. El misterio de su desaparición se vincula con posibles ataques de tribus salvajes. El museo de las Culturas del Norte cerca del sitio exhibe piezas arqueológicas, incluyendo cerámica con más de mil años de antigüedad. A 30 minutos se encuentra el pueblo mágico de Mata Ortiz, famoso por la producción de ollas de cerámica.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+
+
+        //Se añaden todas las marcas al mapa
+  
+           Jawg_Sunny.addTo(map);
+           L.geolet({ position: 'bottomleft' }).addTo(map);
+
+   </script>
+<button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+   <span class="sr-only">Open sidebar</span>
+   <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+      <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+   </svg>
+</button>
+
+    <!-- Alert para indicar que hay eventos disponibles -->
+<div class="fixed bottom-0 w-full flex items-center justify-center z-50 sm:top-0 sm:bottom-auto mb-4 sm:relative">
+   <div id="alert-additional-content-1" class="p-4 mb-4 text-white border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-white-400 dark:border-blue-800 m-4" role="alert">
+     <div class="flex items-center">
+       <svg class="flex-shrink-0 w-4 h-4 mr-2" aria-hidden="true" xmlns="https://cdn-icons-png.flaticon.com/512/948/948036.png" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M18.807,0.337h-3.616v1.808c0,0.475-0.384,0.859-0.859,0.859c-0.474,0-0.859-0.384-0.859-0.859V0.337H6.731
+            v1.808c0,0.475-0.384,0.859-0.859,0.859c-0.474,0-0.859-0.384-0.859-0.859V0.337h-3.82c-0.474,0-0.859,0.384-0.859,0.859v17.61
+            c0,0.477,0.384,0.859,0.859,0.859h17.613c0.474,0,0.859-0.382,0.859-0.859V1.195C19.665,0.721,19.281,0.337,18.807,0.337z
+             M17.948,17.946H2.052V4.528h15.896V17.946z"></path>
+         </svg>
+
+
+         <!-- Informacion de los eventos -->
+       </svg>
+       <span class="sr-only">Información</span>
+       <h3 class="text-lg font-medium">Aviso de eventos cercanos</h3>
+     </div>
+     <div class="mt-2  text-sm">
+      -¡Te invitamos a celebrar la Independencia de Chihuahua! Un evento lleno de historia y tradición.</div>
+      <div class="flex">
+      <div class="mt-2 mb-2 text-sm">
+         -Festival de la Santa Rita en Chihuahua: Emoción, conciertos y comida típica del 15 al 31 de mayo.
+      <div class="flex">
+      <div class="mt-2 mb-2 text-sm">
+         -Festival Internacional de Chihuahua: Música, danza y arte en julio en toda la ciudad.
+      <div class="flex">
+         <div class="mt-2 mb-2 text-sm">
+         <div class="flex">
+
+          <!-- Botones para que el usuario interactue o cierre la pestañita -->
+      <a href="/events">
+       <button type="button" class="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover-bg-blue-700 dark:focus-ring-blue-800">
+         <svg class="-ml-0.5 mr-2 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
+           <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
+         </svg>
+         Ver más
+       </button>
+      </a>
+       <button type="button" class="text-white bg-transparent border border-blue-800 hover-bg-blue-900 hover-text-white focus-ring-4 focus-outline-none focus-ring-blue-200 font-medium rounded-lg text-xs px-3 py-1.5 text-center dark-hover-bg-blue-600 dark-border-blue-600 dark-text-blue-400 dark-hover-text-white dark-focus-ring-blue-800" data-dismiss-target="#alert-additional-content-1" aria-label="Cerrar">
+         Cerrar
+       </button>
+     </div>
+   </div>
+</div>
+
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+</body>
+</html>

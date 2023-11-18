@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourify</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+         crossorigin=""/>
+    <link rel="website icon" type="png" href="../../static/images/logo.png">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+         crossorigin=""></script>
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@[1.9.2]/dist/L.Control.Locate.min.css" />
+         <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@[1.9.2]/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+         <style>
+#map {
+    width: 83.3%;
+    height: 89.3vh;
+    position: relative;
+    display: flex;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: 0; /* Agrega un margen derecho para evitar superposición con el aside */
+    z-index: 1; /* Ajusta el índice Z del mapa */
+}
+
+@media (max-width: 768px) {
+    #map {
+        width: 100%; 
+        height: 89.3vh;
+        margin-right: 0;
+    }
+}
+
+#logo-sidebar {
+    z-index: 2; /* Ajusta el índice Z del aside para que aparezca encima del mapa */
+}
+          </style>
+    
+ 
+<style>
+
+    #userDropdown {
+  z-index: 1000; /* Puedes ajustar este valor según sea necesario para que esté por delante de otros elementos */
+  position: relative;
+  background: fixed;
+}
+</style>
+
+
+    
+<nav class="bg-white border-gray-200 dark:bg-gray-900">
+    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <a href="" class="flex items-center">
+        <img src="../../static/images/logo.png" class="h-12 mr-3" alt="" />
+    </a>
+    <div class="flex md:order-2">
+        <a>
+
+<div class="flex items-center">
+  <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-full cursor-pointer" src="../../static/usersimages/<%= img[0].image %>" alt="User dropdown">
+</div>
+
+            <!-- Dropdown menu -->
+            <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                  <div>Traveler</div>
+                  <div class="font-medium truncate"></div>
+                </div>
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                  <li>
+                    <a href="/profile" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+                  </li>
+                  <li>
+                    <a href="/profile" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Support</a>
+                  </li>
+                </ul>
+                <div class="py-1">
+                  <a href="/login" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+                </div>
+            </div>
+                        
+        </a>
+         
+        <button data-collapse-toggle="navbar-sticky" type="button" class="pt-2 top-0 z-50 inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
+
+                  <span class="sr-only">Open main menu</span>
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+          </svg>
+      </button>
+    </div>
+    <div class="flex items-center justify-between z-1000 0een hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky"> 
+      <div class=" top-0 z-50 w-full md:relative md:flex md:w-auto md:order-1" id="navbar-sticky">
+
+      
+      <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+        <li>
+          <a href="/homeu" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" aria-current="page">Home</a>
+        </li>
+        <li>
+          <a href="/map" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500">Map</a>
+        </li>
+        <li>
+          <a href="/achievements" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Achievements</a>
+        </li>
+        <li>
+          <a href="/events" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Events</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+  </nav>
+  
+</head>
+
+<body>
+    
+    <div id="map"></div>
+
+    <script>
+
+
+var Jawg_Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token=yj75lsDgheFJbRZmAjiim07TKAapfZ5oHwT501C8AsBCb8WUuVjShJlyZozGX6Bt', {
+   attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+   minZoom: 0,
+   maxZoom: 22,
+   subdomains: 'abcd',
+});
+
+var map = L.map('map').setView([28.643951810520395, -106.0729363634578], 15);
+
+var greenIcon = L.icon({
+   iconUrl: '   https://cdn-icons-png.flaticon.com/512/3655/3655039.png ',
+   iconSize:     [50, 50],
+   iconAnchor:   [22, 94],
+   popupAnchor:  [-3, -76]
+});
+
+
+
+var catedralIcon = L.icon({
+   iconUrl: 'https://cdn-icons-png.flaticon.com/512/3893/3893557.png ',
+   iconSize:     [35, 35],
+   iconAnchor:   [22, 94],
+   popupAnchor:  [-3, -76]
+});
+
+var restaurantIcon = L.icon({
+   iconUrl: '   https://cdn-icons-png.flaticon.com/512/948/948036.png ',
+   iconSize:     [35, 35],
+   iconAnchor:   [22, 94],
+   popupAnchor:  [-3, -76]
+});
+
+var quintagamerosIcon = L.icon({
+   iconUrl: '    https://cdn-icons-png.flaticon.com/512/1968/1968779.png ',
+   iconSize: [32, 32],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+});
+
+var toucheIcon = L.icon({
+   iconUrl: ' https://cdn-icons-png.flaticon.com/512/1044/1044002.png',
+   iconSize: [35, 40],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+});
+
+var townIcon = L.icon({
+   iconUrl: 'https://cdn-icons-png.flaticon.com/512/1151/1151658.png',
+   iconSize: [35, 40],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+});
+
+
+var monumentIcon = L.icon({
+   iconUrl: 'https://cdn-icons-png.flaticon.com/512/1085/1085284.png',
+   iconSize: [35, 40],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+});
+
+var theatreIcon = L.icon({
+   iconUrl: 'https://cdn-icons-png.flaticon.com/512/571/571940.png',
+   iconSize: [35, 35],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+});
+
+var museumIcon = L.icon({
+   iconUrl: 'https://cdn-icons-png.flaticon.com/512/2747/2747427.png',
+   iconSize: [35, 40],
+   iconAnchor: [22, 94],
+   popupAnchor: [-3, -76]
+});
+
+
+
+L.marker([28.640049083221417, -106.07255555462534], { icon: greenIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/angel.webp" alt="Angel of independence" class="mx-auto" width="170" /><p>It is one of the most iconictu-enlace-aqui landmarks in Mexico and holds significant historical and cultural importance. The Angel of Independence was constructed in 1910 to commemorate the centennial of Mexico\'s War of Independence against Spanish colonial rule, which began in 1810. The monument stands at the intersection of Paseo de la Reforma and Avenida Insurgentes, two major thoroughfares in Mexico City.</p><a href="https://safe-unexpected-minute.glith.me">Click here for augmented reality</a></div>');
+
+L.marker([28.639210228660716, -106.07348138681505], { icon: restaurantIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/miguel.png" alt="Miguel Image" class="mx-auto" width="170" /><p>El Altar de la Patria. Es el Lugar del Fusilamiento Justo en el patio del Palacio de Gobierno se encuentra el Altar de la Patria, que marca el sitio exacto donde Miguel Hidalgo fue fusilado el 30 de julio de 1811 después de estar preso. Contiene dos esculturas conmovedoras: una de él sentado, con los ojos vendados y esperando recibir los disparos fatales, aún con un crucifijo en la mano; y otra que lo representa de pie arengando al pueblo como el líder carismático que fue. Visitar este altar permite conectarnos con ese pasado heroico y el origen libertario de Chihuahua. Palpar la historia en el mismo lugar donde ocurrió es una experiencia que todo visitante debería vivir. El Altar de la Patria sintetiza el sacrificio de los insurgentes que dieron su vida por la independencia.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+L.marker([28.63593583542254, -106.0770682181641], { icon: catedralIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/catedralmetro.png alt="Angel of independence" class="mx-auto" width="170" /><p>It is one of the most iconic landmarks in Mexico and holds significant historical and cultural importance. The Angel of Independence was constructed in 1910 to commemorate the centennial of Mexico\'s War of Independence against Spanish colonial rule, which began in 1810. The monument stands at the intersection of Paseo de la Reforma and Avenida Insurgentes, two major thoroughfares in Mexico City.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+L.marker([28.632201227660367, -106.07338241751833], { icon: quintagamerosIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/quintagameros.png" alt="Quinta Gameros" class="mx-auto" width="170" /><p>Quinta Gameros is a historic building in Mexico and is known for its architectural beauty and historical significance.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+L.marker([28.634107603028113, -106.07265739274982], { icon: toucheIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/touche.png" alt="Palacio de Gobierno" class="mx-auto" width="170" /><p>The Palacio de Gobierno is an important government building in Mexico. It has historical significance and is a prominent landmark in the city.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+   L.marker([28.638855203246987, -106.07567287514694], { icon: museumIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/touche.png" alt="La Casa de Juárez" class="mx-auto" width="170" /><p>El museo de la Lealtad Republicana, mejor conocido como la Casa de Juárez, se encuentra en la esquina de las calles Juárez y Quinta, en el centro histórico de la ciudad de Chihuahua; sede del Poder Ejecutivo de México por más de dos años, lugar histórico donde gobernó el presidente Juárez en su peregrinar por el país, llegando con parte de su gabinete a tierra de ‘‘hombres bárbaros‘‘, que más que bárbaros en el sentido despectivo de la palabra, resultaron ser una sociedad, educada, noble, valiente, leal y hospitalaria. En el museo de la Lealtad Republicana (Casa de Juárez) en Chihuahua se pueden admirar los muebles de la época, que fueron utilizados por el Benemérito, ahí permanecen los documentos propios a las comunicaciones escritas que Benito Juárez tenía con los diferentes protagonistas de la historia de la época de la Reforma, instrumentos de trabajo y, sobre todo, la réplica del carruaje que trasladó al presidente Juárez se encuentran en este hermoso lugar de patio interior y construcción de adobe. El edificio se construyó para dar cabida a las oficinas del Gobierno del Estado, quien generosamente lo entregó al Presidente de la República, convirtiéndose por ese solo hecho en digno Palacio Nacional, por el tiempo que duró en Chihuahua nuestro distinguido huésped, ahí mismo se acondicionó la residencia de Benito Juárez; posteriormente fue utilizado como escuela de educación primaria, se convirtió en un museo que por muchos años, y hoy todavía, se le conoce como la Casa de Juárez, para que finalmente mudara su nombre y se acondicionara el museo de la Lealtad Republicana, que es su nombre correcto.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+
+   L.marker([28.634279183423377, -106.0707891], { icon: monumentIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/touche.png" alt="¿CAPILLA, MAUSOLEO O CENOTAFIO? " class="mx-auto" width="170" /><<p>Francisco Villa mandó construir un espacio donde descansarían para siempre sus restos mortales, un lugar digno para un gran personaje, el monumento mortuorio se edificó entre los años de 1913 y 1914 en el panteón de Nuestra Señora de la Regla, hoy convertido en el parque Revolución. Villa era un hombre previsor, junto al cenotafio, en el panteón de la Regla, mirando de frente el edificio, a su lado izquierdo, mandó construir el monumento mortuorio, que estaba destinado a guardar los cuerpos de los generales que habían combatido a su lado, sólo dos de ellos fueron sepultados ahí Toribio Ortega y Trinidad Rodríguez. El cenotafio del que hablamos combina varios estilos de construcción, que a decir de un experto va del neoclásico al gótico, con sus ventanas ojivales que rematan con arcos árabes tipo mezquita, tiene una torre y un campanario; éste, adornado con flores de Liz en el arco, símbolo de la realeza francesa; ubicados en la parte central del edificio, las columnas que parecen griegas con basamentos barrocos, capiteles con volutas dóricas, con adornos de rosas y cintillos con petunias, blasones con hojas de lino, que usaban los faraones para refrescarse. Al interior del edificio, un ángel y un féretro hechos de mármol, cuando todo el edificio es de cantera, hay también cruces gamadas adornando unas repisas, cruces que los alemanes utilizaron en los tanques de guerra, uvas y caireles adornando el espacio.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+   L.marker([28.639775466814818, -106.07392409048974], { icon: toucheIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/touche.png" alt="LA CASA CHIHUAHUA CENTRO DE PATRIMONIO CULTURAL (PALACIO FEDERAL) " class="mx-auto" width="170" /><p>El Colegio de Jesuitas, hoy Palacio Federal es uno de los edificios con mayor antigüedad en la ciudad de Chihuahua; sus inicios se remontan al año de 1718, tiempo que ha sido testigo de grandes acontecimientos acecidos en nuestra querida ciudad capital. Dentro de sus instalaciones se encontraba el templo de Nuestra Señora de Loreto, pudiéramos decir que actualmente es el único vestigio de sus edificios, porque la torre izquierda del templo que se utilizó como cárcel para Miguel Hidalgo sigue ahí tal y como era en aquellos tiempos, hoy le llamamos el calabozo de Hidalgo. En 1865 durante la estancia del presidente Juárez en Chihuahua, el colegio y el convento de San Francisco se vendieron al señor José Cordero Zuza, posteriormente el gobierno del estado recuperó el colegio, el terreno se dividió y se construyó el Palacio del Gobierno del Estado; y posteriormente, en 1910, se levanta el edificio actual, el Palacio Federal que se usó como sede de varias oficinas federales, con 5,521 metros cuadrados de construcción y una altura de 14. Casa Chihuahua Centro de Patrimonio Cultural es el primer espacio cultural en su género, al ser concebido como un centro referencial del patrimonio del estado. </p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+   L.marker([28.63675333357773, -106.07425182515009], { icon: theatreIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/touche.png" alt="EL TEATRO DE LA CIUDAD " class="mx-auto" width="170" /><p>En el siglo XIX, el Teatro Betancourt, construido por Don Miguel Betancourt, fue un importante lugar cultural en Chihuahua. Aquí se presentaron diversas formas de entretenimiento, desde zarzuelas hasta óperas y películas. Después de la muerte de Betancourt, el teatro fue vendido y rebautizado como Teatro Centenario en 1910. Este nuevo teatro fue popular y acogió una amplia variedad de eventos, incluyendo cine, box y lucha libre. Sin embargo, en 1938, el Teatro Centenario sufrió un incendio y quedó reducido a su fachada. Luego, en 1947, se inauguró el Cine Colonial en el mismo lugar, que se convirtió en un importante centro de entretenimiento en Chihuahua. Con el tiempo, el cine perdió su popularidad y fue comprado por Salinas Pliego, quien lo transformó en una tienda. Finalmente, en el año 2000, con fondos públicos, el edificio fue restaurado y se convirtió en el moderno y versátil Gran Teatro de la Ciudad de Chihuahua. Este proceso de transformación del espacio teatral a lo largo de los años refleja la importancia de la cultura y las artes en la historia de la ciudad.</p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+   L.marker([28.653085367537734, -106.08435655352973], { icon: toucheIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/touche.png" alt="EL TEATRO DE LOS HÉROES " class="mx-auto" width="170" /><p>En 1901, se inauguró el antiguo Teatro de los Héroes en Chihuahua, México, que honraba a tres personajes históricos: Miguel Hidalgo, Benito Juárez y Porfirio Díaz. El teatro fue testigo de eventos significativos, como el juicio y condena a muerte del general Felipe Ángeles. Sin embargo, en 1955, el teatro sufrió un incendio y cerró. Durante los siguientes 25 años, artistas utilizaron recintos alternativos en la ciudad. En 1980, el político Manuel Bernardo Aguirre inauguró un nuevo y moderno Teatro de los Héroes, junto con un complejo cultural. El teatro se construyó en terrenos que habían sido un antiguo cementerio. A pesar de algunas historias inquietantes sobre huesos humanos encontrados durante la construcción, el nuevo teatro se convirtió en un lugar destacado para eventos culturales y políticos. </p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+   L.marker([28.62950763849901, -106.06845175384157], { icon: townIcon }).addTo(map)
+   .bindPopup('<div class="text-center"><img src="images/touche.png" alt="CASA DE VILLA / QUINTA LUZ/MUSEO HISTÓRICO DE LA REVOLUCIÓN MEXICANA" class="mx-auto" width="170" /><p>La vida de doña Luz Corral de Villa, la esposa de Francisco Villa, y su dedicación a preservar la memoria y legado de Villa. Durante casi 60 años, doña Luz vivió en la casa que su esposo le había adquirido y remodelado, llamándola "Quinta Luz" en su honor. Ella mantuvo la propiedad y el honor de Villa, conversando con personas sobre los días de la Revolución y creando un modesto museo. Después de su fallecimiento en 1981, la casa se convirtió en el Museo Histórico de la Revolución Mexicana, exhibiendo objetos personales de Villa y doña Luz, muebles de la época, armas, y el automóvil en el que Villa fue asesinado. El museo ha recibido numerosos visitantes interesados en la historia de Villa y su legado./p><a href="tu-enlace-aqui">Click here for augmented reality</a></div>');
+
+   
+
+
+            Jawg_Sunny.addTo(map);
+
+    </script>
+<button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+    <span class="sr-only">Open sidebar</span>
+    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+       <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+    </svg>
+ </button>
+ 
+ <aside id="logo-sidebar" class="fixed flex-1 top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+    <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+       <a href="" class="flex items-center pl-2.5 mb-5">
+          <img src="../../static/images/logo.png" class="h-6 mr-3 sm:h-7" alt="Flowbite Logo" />
+          <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Administrador</span>
+       </a>
+       <style>
+        .button.active {
+            color: #3B82F5; /* Cambia este color según tus preferencias */
+        }
+        </style>
+
+       <div class="text-sm font-medium text-center mb-4 border-b border-gray-200 dark:text-gray-100 dark:border-gray-700">
+        <nav role="navigation">
+            <ul class="flex flex-wrap">
+                <li class="mr-2">
+                    <a href="javascript:void(0)" class="button active" data-tab="profile" role="tab" aria-selected="true">Histórico</a>
+                </li>
+                <li class="mr-2">
+                    <a href="javascript:void(0)" class="button" data-tab="dashboard" role="tab" aria-selected="false">Comida</a>
+                </li>
+                <li class="mr-2">
+                    <a href="javascript:void(0)" class="button" data-tab="settings" role="tab" aria-selected="false">Evento</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+    <!-- Contenido específico para cada pestaña -->
+    <section id="select-content-profile" class="h-40">
+        <!-- Contenido de la pestaña Historical -->
+            <label for="helper-text-historical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la Ubicación</label>
+            <input type="text" id="helper-text-historical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Angel de la Independencia">
+            <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Coordenadas</label>
+            <input type="text" id="helper-text" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="28.64186518497492, -106.07286827165497">
+            <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2 mb-2">Información</label>
+            <form>
+              <div class="w-full mb-2 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                  <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                      <label for="comment" class="sr-only">Your comment</label>
+                      <textarea id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Es una de los monumentos más importantes..." required></textarea>
+                  </div>
+    
+              </div>
+          </form>
+          <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Imágen</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" multiple>
+            <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Audio</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" multiple>
+            <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Modelo 3D</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 mb-3" id="multiple_files" type="file" multiple>
+
+
+            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-8 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
+            <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Borrar</button>
+  
+      </section>
+    
+    <section id="select-content-dashboard" class="h-40 hidden">
+        <!-- Contenido de la pestaña Food -->
+            <label for="helper-text-food" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la Comida</label>
+            <input type="text" id="helper-text-food" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tacos al pastor">
+            <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Coordenadas</label>
+            <input type="text" id="helper-text" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="28.64186518497492, -106.07286827165497">
+            <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2 mb-2">Información</label>
+            <form>
+              <div class="w-full mb-2 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                  <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                      <label for="comment" class="sr-only">Your comment</label>
+                      <textarea id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Es una de los restaurantes más importantes..." required></textarea>
+                  </div>
+    
+              </div>
+          </form>
+          <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Imágen</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 mb-3" id="multiple_files" type="file" multiple>
+          
+            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-8 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
+            <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Borrar</button>
+  
+          </section>
+    
+    <section id="select-content-settings" class="h-40 hidden">
+        <!-- Contenido de la pestaña Events -->
+            <label for="helper-text-event" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre del Evento</label>
+            <input type="text" id="helper-text-event" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Feria de Santa Rita">
+            <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Coordenadas</label>
+            <input type="text" id="helper-text" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="28.64186518497492, -106.07286827165497">
+            <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2 mb-2">Información</label>
+            <form>
+              <div class="w-full mb-2 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                  <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                      <label for="comment" class="sr-only">Your comment</label>
+                      <textarea id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Es una de los eventos más importantes..." required></textarea>
+                  </div>
+    
+              </div>
+          </form>
+          <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Imágen</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 mb-3" id="multiple_files" type="file" multiple>
+    
+              
+            <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Fecha de Inicio</label>
+
+            <div class="relative max-w-sm">
+              <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                  </svg>
+              </div>
+              <input datepicker datepicker-buttons type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Del 18 de mayo">
+            </div>
+
+            <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Fecha de Final</label>
+            <div class="relative max-w-sm">
+              <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                  </svg>
+              </div>
+              <input datepicker datepicker-buttons type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3" placeholder="al 4 de junio">
+            </div>
+
+            
+
+            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-8 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
+            <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Borrar</button>
+      
+      </section>
+    
+    <script>
+        const tabs = Array.from(document.querySelectorAll(".button"));
+        const contentArray = Array.from(document.querySelectorAll('section'));
+    
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-tab');
+    
+                tabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+    
+                contentArray.forEach(content => {
+                    content.classList.add('hidden');
+                });
+    
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                document.getElementById(`select-content-${target}`).classList.remove('hidden');
+            });
+        });
+    </script>
+    
+ </aside>
+
+ 
+
+ 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+</body>
+</html>

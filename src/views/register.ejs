@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourify</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css"  rel="stylesheet" />
+    <link rel="icon" href="../../static/images/logo.png" />
+</head>
+<body class="bg-gray-900">
+
+    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a href="" class="flex items-center">
+            <img src="../../static/images/logo.png" class="h-12 mr-3" alt="Flowbite Logo" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Tourify</span>
+        </a>
+        
+        <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+          <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+
+      </nav>
+      <div>
+        <!-- component -->
+<body>
+    <section class="max-h-screen flex items-center text-white mt-19 sm:mt-19 lg:mt-24">
+        <div class="lg:flex w-1/2  hidden bg-transparent bg-no-repeat bg-cover relative items-center">
+            <div class="w-full px-24 z-0">
+              <h1 class="text-5xl font-bold text-left tracking-wide">Descubre tu entorno</h1>
+              <p class="text-3xl my-4">Rincones que murmuran leyendas, despiertan memorias, y revelan legados.</p>
+          </div>
+
+
+                <div class="relative lg:w-1/2 w-full flex items-center justify-center text-center md:w-full sm:w-full px-0 z-0">                    <!-- Código existente del formulario -->
+                </div>
+        </div>
+        <div class="lg:w-1/2 w-full flex items-center justify-center text-center md:px-16 px-0 z-0">
+            <div class="relative lg:hidden z-10 inset-0 bg-gray-500 bg-no-repeat bg-cover items-center" >
+                
+                <div class="relative sm:items-center sm:justify-center sm:bg-cover sm:bg-center sm:bg-no-repeat  sm:bg-fixed sm:bg-black sm:opacity-100 inset-0 z-0" style="background-image: url('https://i.pinimg.com/564x/8b/5e/f6/8b5ef64aef3cf359ffc0b1581a2201c7.jpg');"></div>
+            </div>
+
+            <div class="w-full  z-20">
+                <div class="w-full z-20">
+                    <div class="sm:hidden md-block w-full  text-white">
+                        <h1 class="text-4xl font-bold text-left tracking-wide mr-2 ml-2 mt-2 text-center md:text-center">Descubre tu entorno</h1>
+                        <p class="text-2xl pt-2 m">Rincones que murmuran leyendas, despiertan memorias, y revelan legados.</p>
+                      </div>
+                </div>
+                
+                <div class="space-x-2">
+                </div>
+                <form method="POST" action="/register" class="sm:w-2/3 w-full px-4 mt-6 lg:px-0 mx-auto">
+                    <div class="pb-2">
+                        <input type="text" name="name" id="name" placeholder="Usuario" class="block w-full p-4 text-lg rounded-sm bg-black" required>
+                    </div>
+                    
+                    <div class="pb-2 pt-4">
+                        <input type="email" name="email" id="email" placeholder="Email" class="block w-full p-4 text-lg rounded-sm bg-black " required>
+                    </div>
+                    <div class="pb-2 pt-4">
+                        <input class="block w-full p-4 text-lg rounded-sm bg-black" type="password" name="password" id="password" placeholder="Password" required>
+                    </div>
+                    <div class="pb-2 pt-4">
+                        <input class="block w-full p-4 text-lg rounded-sm bg-black" type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" required>
+                    </div>
+                    <div class="px-4 pb-2 pt-4">
+                        <button type="submit" class="uppercase block w-full p-4 text-lg rounded-full bg-blue-700 hover:bg-blue-800 focus:outline-none">Registrar</button>
+                    </div>
+                        <div class="flex mt-3 justify-center text-sm">
+                            <a class="text-white hover:text-blue-500 font-bold underline" href="/">Ya tienes una cuenta?</a>
+                        </div>
+                    
+                        <% if (typeof emailRegistrado !== 'undefined' && emailRegistrado) { %>
+                            <p><div class="mt-4 flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                                </svg>
+                                <span class="sr-only">Info</span>
+                                <div>
+                                  <span class="font-medium">Oooh crap!</span> Looks like that email it's already registered! Try with another email.
+                                </div>
+                              </div></p>
+                          <% } else if (typeof errorInterno !== 'undefined' && errorInterno) { %>
+                            <p><div class="mt-4 flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                                </svg>
+                                <span class="sr-only">Info</span>
+                                    <div>
+                                        <span class="font-medium">My bad my bad!</span> I can't save that information, try again!
+                                    </div>
+                                </div></p>  
+                            <% } else if (typeof contraseñaNoCoincide !== 'undefined' && contraseñaNoCoincide) { %>
+                                <p><div class="mt-4 flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                                    <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                                    </svg>
+                                    <span class="sr-only">Info</span>
+                                        <div>
+                                            <span class="font-medium">Oohh no!</span> Your password doesn't seem to match, try again!
+                                        </div>
+                                    </div></p>  
+                            <% } %>
+
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+
+           
+
+<video autoplay loop muted plays-inline id="background-video" class="object-cover object-center w-full h-full">
+    <source src="../../static/images/earth.mp4" type="video/mp4">
+</video>
+<div class="video-overlay"></div>
+
+
+
+
+<style class="relative w-screen h-screen overflow-hidden">
+.background-video {
+position: relative;
+height: 100vh;
+overflow: hidden;
+}
+
+video#background-video {
+position: absolute;
+top: 0;
+left: 0;
+min-width: 100%;
+min-height: 100%;
+width: auto;
+height: auto;
+z-index: -1000;
+}
+
+.video-overlay {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.2); /* Ajusta el último valor (0.5) para la opacidad */
+z-index: -999;
+}
+
+    
+
+    </style>
+    
+    </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+</body>
+</html>
