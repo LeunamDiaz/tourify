@@ -278,31 +278,48 @@ L.marker([28.634107603028113, -106.07265739274982], { icon: toucheIcon }).addTo(
     <!-- Contenido específico para cada pestaña -->
     <section id="select-content-profile" class="h-40">
         <!-- Contenido de la pestaña Historical -->
-            <label for="helper-text-historical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la Ubicación</label>
-            <input type="text" id="helper-text-historical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Angel de la Independencia">
-            <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Coordenadas</label>
-            <input type="text" id="helper-text" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="28.64186518497492, -106.07286827165497">
-            <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2 mb-2">Información</label>
-            <form>
+        <form enctype="multipart/form-data" action="/uploadhistoricals" method="POST" >
+
+            <label for="namehistorical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la Ubicación</label>
+            <input type="text" name="namehistorical" id="namehistorical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Angel de la Independencia" required>
+            <label for="coordinate-historical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Coordenadas</label>
+            <input type="text" name="coordinate-historical" id="coordinate-historical" aria-describedby="helper-text-explanation" class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="28.64186518497492, -106.07286827165497" required>
+            
+            <label for="description-historical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2 mb-2">Información</label>
               <div class="w-full mb-2 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                   <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
-                      <label for="comment" class="sr-only">Your comment</label>
-                      <textarea id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Es una de los monumentos más importantes..." required></textarea>
+                      <label for="description-historical" class="sr-only">Your comment</label>
+                      <textarea id="description-historical" name="description-historical" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Es una de los monumentos más importantes..." required></textarea>
                   </div>
-    
               </div>
+
+            <label for="typepin" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2 mb-2">Tipo de Pin de la Mark</label>
+             
+                <select name="typepin" id="typepin"  class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                  <option value="">Lugar Historico</option>  
+                  <option value="">Museo</option>
+                  <option value="">Estatua</option>
+                  <option value="">Teatro</option>
+                  <option value="">Pueblo Mágico</option>
+                </select>
+              
+              
+            <label for="name_city_historical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la ciudad</label>
+            <input type="text" name="name_city_historical" id="name_city_historical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Chihuahua, Chih." required>
+            <label for="year-construction" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Año de construcción</label>
+            <input type="text" name="year-construction" id="year-construction" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1826" required>
+            <label for="video_historical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">URL del video (Youtube)</label>
+            <input type="text" name="video_historical" id="video_historical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="https://www.youtube.com/..." required> 
+            <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="image_place_historical">Imágen del lugar</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="image_place_historical" name="image_place_historical" type="file">
+            <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="model_3d">Modelo 3D</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 mb-3" id="model_3d" type="file">
+
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-8 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
+            <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Borrar</button>
+
           </form>
-          <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Imágen</label>
-            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" multiple>
-            <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Audio</label>
-            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" multiple>
-            <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Modelo 3D</label>
-            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 mb-3" id="multiple_files" type="file" multiple>
 
-
-            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-8 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
-            <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Borrar</button>
-  
       </section>
     
     <section id="select-content-dashboard" class="h-40 hidden">

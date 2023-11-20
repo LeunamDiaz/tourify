@@ -103,32 +103,68 @@
                 <h2 class="mb-1 font-bold text-2xl">Achievements</h2>     
 
                   <div class="flex items-center w-full p-2 w-full max-w-sm rounded-lg shadow dark:bg-gray-800">
-                    <img src="../../static/imagemedallas/medalla1.png" data-tooltip-target="t1" class="h-8 trophy px-1" alt="Flowbite Logo"/>
+
+                    <% var trophyClass = "trophy"; %>
+                    <% if (resultado[0].logros < 1) { %>
+                      <% trophyClass += " grayscale"; %>
+                    <% } %>
+
+                    <img src="../../static/imagemedallas/medalla1.png" data-tooltip-target="t1" class="h-8 <%= trophyClass %> px-1" alt="Flowbite Logo"/>
                       <div id="t1" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                         Visita tu primer lugar histórico
                       <div class="tooltip-arrow" data-popper-arrow></div>
                       </div>
-                    <img src="../../static/imagemedallas/medalla2.png" data-tooltip-target="t2" class="h-8  px-1" alt="Achievements Logo" />
+
+                      <% var trophyClass = "trophy"; %>
+                    <% if (resultado[0].logros < 3) { %>
+                      <% trophyClass += " grayscale"; %>
+                    <% } %>
+
+                    <img src="../../static/imagemedallas/medalla2.png" data-tooltip-target="t2" class="h-8 <%= trophyClass %> px-1" alt="Achievements Logo" />
                       <div id="t2" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                         Visita 3 lugares históricos
                         <div class="tooltip-arrow" data-popper-arrow></div>
                       </div>
-                    <img src="../../static/imagemedallas/medalla3.png" data-tooltip-target="t3" class="h-11  px-1" alt="Achievements Logo" />
+
+                      <% var trophyClass = "trophy"; %>
+                    <% if (resultado[0].logros < 5) { %>
+                      <% trophyClass += " grayscale"; %>
+                    <% } %>
+
+                    <img src="../../static/imagemedallas/medalla3.png" data-tooltip-target="t3" class="h-11 <%= trophyClass %> px-1" alt="Achievements Logo" />
                     <div id="t3" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                       Visita 5 lugares históricos
                       <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
-                    <img src="../../static/imagemedallas/medalla4.png" data-tooltip-target="t4" class="h-10  px-1 " alt="Flowbite Logo" />
+
+                    <% var trophyClass = "trophy"; %>
+                    <% if (resultado[0].logros < 7) { %>
+                      <% trophyClass += " grayscale"; %>
+                    <% } %>
+
+                    <img src="../../static/imagemedallas/medalla4.png" data-tooltip-target="t4" class="h-10 <%= trophyClass %> px-1 " alt="Flowbite Logo" />
                     <div id="t4" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                       Visita 7 lugares históricos
                       <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
-                    <img src="../../static/imagemedallas/medalla5.png" data-tooltip-target="t5" class="h-11  px-1 grayscale" alt="Achievements Logo" />
+
+                    <% var trophyClass = "trophy"; %>
+                    <% if (resultado[0].logros < 10) { %>
+                      <% trophyClass += " grayscale"; %>
+                    <% } %>
+
+                    <img src="../../static/imagemedallas/medalla5.png" data-tooltip-target="t5" class="h-11 <%= trophyClass %> px-1 grayscale" alt="Achievements Logo" />
                     <div id="t5" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                       Visita 10 lugares históricos
                       <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
-                    <img src="../../static/imagemedallas/medalla6.png" data-tooltip-target="t6" class="h-10  px-1 grayscale" alt="Achievements Logo" />
+
+                    <% var trophyClass = "trophy"; %>
+                    <% if (resultado[0].logros < 20) { %>
+                      <% trophyClass += " grayscale"; %>
+                    <% } %>
+
+                    <img src="../../static/imagemedallas/medalla6.png" data-tooltip-target="t6" class="h-10  px-1 <%= trophyClass %>" alt="Achievements Logo" />
                     <div id="t6" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
                       Visita 20 lugares históricos
                       <div class="tooltip-arrow" data-popper-arrow></div>

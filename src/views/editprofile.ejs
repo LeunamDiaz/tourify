@@ -113,8 +113,8 @@
               </h2>
 
               <div class="pb-2 pt-4">
-                <select name="country" id="country"  class="block w-full p-4 text-lg rounded-sm bg-black text-white" required>
-                    <option value="<%= user[0].country %>" selected><%= user[0].country %></option>
+                <select name="country" id="country"  class="block w-full p-4 text-lg rounded-sm bg-black text-white">
+                    <option value="<%= user[0].country %>"><%= user[0].country %></option>
                   <% countriesList.forEach(country => { %>
                     <option value="<%= country.id_country %>"><%= country.name %></option>
                   <% }); %>
