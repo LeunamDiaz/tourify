@@ -1,57 +1,58 @@
 const { Router } = require('express');
 const router = Router();
-const mysql = require('mysql');
+const db = require('../services/database');  
 const bcrypt = require('bcrypt');
 const path = require('path');
 
-const multer = require('multer');
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'static/imageshistoricals'); // Ruta donde se guardarán las imágenes
-    },
-    filename: function (req, file, cb) {
+
+
+const multer = require('multer');  //AGREGADO
+
+const storageProfile = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'static/usersimages'); // Ruta donde se guardarán las imágenes de perfil
+  },
+  filename: function (req, file, cb) {
       cb(null, file.originalname);
-    }
-  });
-  const upload = multer({ storage: storage });
+  }
+});
+const uploadProfile = multer({ storage: storageProfile });
+
+const storageHistoricals = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'static/imageshistoricals'); // Ruta donde se guardarán las imágenes de historicals
+  },
+  filename: function (req, file, cb) {
+      cb(null, file.originalname);
+  }
+});
+const uploadHistorical = multer({ storage: storageHistoricals });
+
+const storageRestaurants = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'static/imagesrestaurants'); // Ruta donde se guardarán las imágenes de restaurants
+  },
+  filename: function (req, file, cb) {
+      cb(null, file.originalname);
+  }
+});
+const uploadRestaurant = multer({ storage: storageRestaurants });
+
+const storageEvents = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'static/imagesevents'); // Ruta donde se guardarán las imágenes de events
+  },
+  filename: function (req, file, cb) {
+      cb(null, file.originalname);
+  }
+});
+const uploadEvent = multer({ storage: storageEvents });
 
 const { promisify }= require('util'); //AGREGADO
 const { log } = require('console');
 const { text } = require('body-parser');
 const { Select } = require('flowbite-react');
-
-  //BASE DE DATOS
-
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'tourify'
-});
-
-db.connect((err) => {
-    if (err) {
-        console.log('No se ha podido establecer contacto con la base de datos.');
-    } else {
-        console.log('La conección a la base de datos, se ejecutó con normalidad.');
-    }
-});
-
-  //DECLARACION PROMESAS
-
 db.query = promisify(db.query); //AGREGADO
-
-
-process.on(`SIGINT`, () => {
-    db.end((err) => {
-        if (err) {
-            console.error('No se ha podido desconectar de la base de datos actual.' + err.message);
-        } else {
-            console.log('Se ha desconectado correctamente de la base de datos actual.');
-        }
-        process.exit();
-    });
-});
 
 
     //COMIENZAN RUTAS DE LAS PAGINAS DEL INTEGRADOR
@@ -60,9 +61,42 @@ process.on(`SIGINT`, () => {
 
         //TODO DEL LOGIN (GET Y POST)
 
-router.get('/', (req, res) => {     //Funcion para renderizar la primera pagina de Tourify para que el usuario se logee (get)
-  res.render('login.ejs');
+      //Esta cosa destruye la session
+
+      var { globalIdUser } = require('global');
+
+      const checkAuth = (req, res, next) => {
+        console.log(checkAuth);
+        if (req.session.loggedIn) {
+          next();
+        } else {
+          res.redirect('/');
+        }
+      }; //No se si va el punto y coma segun yo si
+
+
+router.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Error al destruir la sesión:', err);
+    } else {
+      // Después de destruir la sesión, simplemente redirige al usuario
+
+      res.redirect('/');
+    }
+  });
 });
+
+
+router.get('/', (req, res) => {     //Funcion para renderizar la primera pagina de Tourify para que el usuario se logee (get)
+  try {
+    res.render('login.ejs');
+  } catch (error) {
+      throw error;
+  }
+});
+
+
 
 router.post('/login', (req, res) => {   //Funcion para verificar el login del usuario (post)
     const email = req.body.email;
@@ -81,11 +115,15 @@ router.post('/login', (req, res) => {   //Funcion para verificar el login del us
         errorEmail = true;
         res.render('login', ({ errorEmail }));
       } else {
-  
-        // Verificar contraseña si el email existe
-        const loginSQL = 'SELECT * FROM users WHERE email = ? AND password = ?';
-        const valores = [email, password];
-  
+
+        console.log(email);
+        console.log(password);
+
+        const loginSQL = 'SELECT * FROM users WHERE SHA(?) = (SELECT password FROM users WHERE email = ?)';
+        
+        const valores = [password, email];
+
+
         db.query(loginSQL, valores, (error, resultado) => {
   
           if (error) {
@@ -98,6 +136,9 @@ router.post('/login', (req, res) => {   //Funcion para verificar el login del us
             res.render('login', ({ errorPassword }));
           } else {
             // Login correcto
+            globalIdUser = resultado[0].id_user;
+            req.session.loggedIn = true;      //VERIFICA EL LOGGIN 
+
             res.redirect('/homeu');
           }
         });
@@ -151,8 +192,8 @@ router.post('/register', (req, res) => {    //Funcion que ejecuta el registro de
               res.render('register', { emailRegistrado });
           } else {
               // Intentar insertar un nuevo usuario
-              const registerSQL = 'INSERT INTO users (name, email, password) VALUES (?,?,?)';
-              const valores = [name, email, password];
+              const registerSQL = 'INSERT INTO users (name, password, email, image, country, active) VALUES (?, SHA(?), ?, "user.png", 42, 1)';
+              const valores = [name, password, email];
               db.query(registerSQL, valores, (error, resultado) => {
                   if (error) {
                       errorInterno = true;
@@ -174,9 +215,13 @@ router.post('/register', (req, res) => {    //Funcion que ejecuta el registro de
 
           //TODO DEL HOMEU (GET)
 
-  router.get('/homeu', async(req, res) => {     //Pagina incial donde el usuario puede ver la pantalla inicial
-    const img = await db.query('select name, image from users where id_user = 8'); //Obtener imagen del usuario
-    res.render('index.ejs', {img: img});
+  router.get('/homeu', checkAuth, async(req, res) => {     //Pagina incial donde el usuario puede ver la pantalla inicial
+    try {
+      const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]); //Obtener imagen del usuario
+      res.render('index.ejs', {img: img});
+    } catch (error) {
+        throw error;
+    }
   });  
 
   //AQUI TERMINA TODO LO DEL HOMEU
@@ -186,10 +231,9 @@ router.post('/register', (req, res) => {    //Funcion que ejecuta el registro de
           //TODO DE lo del mapa (GET Y POST)
 
 
-  router.get('/map', async(req, res) => {     //Renderiza pagina del mapa con las marcas correspondientes (get)
+  router.get('/map', checkAuth, async(req, res) => {     //Renderiza pagina del mapa con las marcas correspondientes (get)
     
     try {
-      const img = await db.query('select image from users where id_user = 8'); //Obtener imagen del usuario
       const events = await db.query('select * from events');
       const restaurants = await db.query('select id_food, name, coordinate, description, image FROM restaurants');
       const historicalplaces = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 1');
@@ -197,6 +241,9 @@ router.post('/register', (req, res) => {    //Funcion que ejecuta el registro de
       const monuments = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 3');
       const theaters = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 4');
       const towns = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 5');
+
+      const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
+
       res.render('map.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns})
           
     } catch (error) {
@@ -205,12 +252,17 @@ router.post('/register', (req, res) => {    //Funcion que ejecuta el registro de
   });
   
 
-  router.get('/historicals/:id_historical', async(req, res) => {
-    const img = await db.query('select name, image from users where id_user = 8');
-    
-    const historical = await db.query('SELECT * FROM gethistorical WHERE id_historical = ?',[req.params.id_historical]);
+  router.get('/historicals/:id_historical', checkAuth, async(req, res) => {
+    try {
+      const historical = await db.query('SELECT * FROM gethistorical WHERE id_historical = ?',[req.params.id_historical]);
 
-    res.render('historicals.ejs', {img: img, historical: historical});
+      const model = await db.query('SELECT model FROM models WHERE id_historical = ?',[req.params.id_historical]);
+
+      const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
+      res.render('historicals.ejs', {img: img, historical: historical, model: model});
+    } catch (error) {
+        throw error;
+    }
   });
 
  //AQUI TERMINA TODO LO DEL MAPA
@@ -219,20 +271,19 @@ router.post('/register', (req, res) => {    //Funcion que ejecuta el registro de
 
           //TODO DE LOS EVENTS (GET) 
 
-  router.get('/events', async(req, res) => {
+  router.get('/events', checkAuth, async(req, res) => {
     try {
         const events = await db.query('select * from events');  //Obtener eventos
         const fechasLegibles = events.map(event => {
         const fecha = new Date(event.dateend).toLocaleString();
-            console.log(fecha);
             return fecha;
         });
-        const img = await db.query('select name, image from users where id_user = 8');  //Obtener imagen del usuario
+        const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
         res.render('events.ejs', {events: events, img: img, fechasLegibles: fechasLegibles});  //Renderizar la pagina con los datos
-          } catch (error) {
-          throw error;
-          }
-        });          
+    } catch (error) {
+        throw error;
+    }
+  });          
 
 //AQUI TERMINA TODO LO DE EVENTS
 
@@ -240,17 +291,12 @@ router.post('/register', (req, res) => {    //Funcion que ejecuta el registro de
 
           //TODO LO DE ACHIEVEMENTS (GET) 
 
-router.get('/achievements', async (req,res) => {
+router.get('/achievements', checkAuth, async (req,res) => {
   try {
-      const results = await db.query('select * from achievements');
-      const img = await db.query('select name, image from users where id_user = 8');
-
-
-      const status = await db.query('SELECT id_historical, created_at FROM users_achievements where id_user = 8');
-      console.log(status);
-
-
-      res.render('achievements.ejs', {results: results, img: img, status: status});
+    const achievements = await db.query('select id_historical, name, image from historicals WHERE id_historical NOT IN (select id_historical from users_achievements WHERE id_user = ?)', [globalIdUser]);
+    const status = await db.query('select id_historical, name, image, DATE_FORMAT(created_at, "%Y-%m-%d %H:%i:%s") AS created_at from historicals WHERE id_historical IN (select id_historical from users_achievements WHERE id_user = ?)', [globalIdUser]);
+    const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
+    res.render('achievements.ejs', {achievements: achievements, img: img, status: status});
   } catch (error) {
       throw error;
       
@@ -263,15 +309,15 @@ router.get('/achievements', async (req,res) => {
 
           //TODO LO DE PROFILE (GET) 
 
-  router.get('/profile', async(req, res) => {
+  router.get('/profile', checkAuth, async(req, res) => {
     try {
-        const userID = 8;
-        const user8 = await db.query('SELECT name, email, (SELECT name FROM countries WHERE id_country = (SELECT country FROM users WHERE id_user = 8)) as country FROM users where id_user = 8');
-        const img = await db.query('select name, image from users where id_user = 8'); //Obtener imagen del usuario
+        const user8 = await db.query('SELECT name, email, (SELECT name FROM countries WHERE id_country = (SELECT country FROM users WHERE id_user = ?)) as country FROM users where id_user = ?', [globalIdUser, globalIdUser]);
 
-        const logros = await db.query('CALL getLogros(?, @logros)', [userID]);
+        const logros = await db.query('CALL getLogros(?, @logros)', [globalIdUser]);
         const resultado = await db.query('SELECT @logros as logros');
-
+        
+        const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
+        console.log(img);
 
         res.render('profile.ejs',{user: user8, img: img, resultado:resultado})
     } catch (error) {
@@ -285,48 +331,151 @@ router.get('/achievements', async (req,res) => {
 
           //TODO LO DE EDITPROFILE (GET Y POST) 
 
-  router.get('/editprofile', async (req, res) => {
-      const user8 = await db.query('SELECT name, email, (SELECT name FROM countries WHERE id_country = (SELECT country FROM users WHERE id_user = 8)) as country, password FROM users where id_user = 8');
-      const img = await db.query('select image from users where id_user = 8'); //Obtener imagen del usuario
+  router.get('/editprofile', checkAuth, async (req, res) => {
+    try {
+      const user8 = await db.query('SELECT name, email, (SELECT name FROM countries WHERE id_country = (SELECT country FROM users WHERE id_user = ?)) as country, password FROM users where id_user = ?', [globalIdUser, globalIdUser]);
       const countriesList = await db.query('SELECT id_country, name FROM countries'); // Obtener la lista de países
       countriesList.sort((a, b) => a.name.localeCompare(b.name));   //Acomoda los paises en orden alfabetico
+
+      const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
     
       res.render('editprofile.ejs', {
         user: user8,                  //Pasa todos los valores de la query del usuario en este caso igual a 8
         countriesList: countriesList, // Pasar la lista de países a la vista
         img:img //Pasar imagen del usuario
       });
-    });
+    } catch (error) {
+      throw error;
+    }
+  });
 
-  router.post('/editprofile', async (req, res) => {       //Esta parte nomas se alargo por culpa del bug de seleccionar el pais, fue dificil, pero se logró. :´)
+  router.post('/editprofile',uploadProfile.single('profileImage'), async (req, res) => {       //Esta parte nomas se alargo por culpa del bug de seleccionar el pais, fue dificil, pero se logró. :´)
       
     try {
 
-      if (isNaN(parseInt(req.body.country, 10))) {
-        const { name, email, password } = req.body;
-        const newUser = {
-            name,
-            email,
-            password
-        };
-        console.log(newUser);
-        await db.query('UPDATE users SET name = ?, email = ?, password = ? where id_user = 8', [newUser.name, newUser.email, newUser.password]);
-        res.redirect('/profile');
+      if (!req.body.password) {
+        
+        if (!req.file) {
+        
+          if (isNaN(parseInt(req.body.country, 10))) {
+          
+            const { name, email } = req.body;
+            const newUser = {
+                name,
+                email
+            };
+            console.log(newUser);
+            await db.query('UPDATE users SET name = ?, email = ? where id_user = ?', [newUser.name, newUser.email, globalIdUser]);
+            res.redirect('/profile');
+    
+          } else {
+            const { name, email, country } = req.body;
+            const newUser = {
+                name,
+                email,
+                country
+            };
+            console.log(newUser);
+            await db.query('UPDATE users SET name = ?, email = ?, country = ? where id_user = ?', [newUser.name, newUser.email, newUser.country, globalIdUser]);
+            res.redirect('/profile');
+    
+          }
+  
+        } else {
+  
+          const newImagenUser = req.file.originalname;
+          
+          if (isNaN(parseInt(req.body.country, 10))) {
+          
+            const { name, email } = req.body;
+            const newUser = {
+                name,
+                email
+            };
+            console.log(newUser);
+            await db.query('UPDATE users SET name = ?, email = ?, image = ? where id_user = ?', [newUser.name, newUser.email, newImagenUser, globalIdUser]);
+            res.redirect('/profile');
+    
+          } else {
+            const { name, email, country, } = req.body;
+            const newUser = {
+                name,
+                email,
+                country
+            };
+            console.log(newUser);
+            await db.query('UPDATE users SET name = ?, email = ?, country = ?, image = ? where id_user = ?', [newUser.name, newUser.email, newUser.country, newImagenUser, globalIdUser]);
+            res.redirect('/profile');
+    
+          }
+  
+        }  
+
 
       } else {
         
-        const { name, email, country, password } = req.body;
-        const newUser = {
-            name,
-            email,
-            country,
-            password
-        };
-        console.log(newUser);
-        await db.query('UPDATE users SET name = ?, email = ?, country = ?, password = ? where id_user = 8', [newUser.name, newUser.email, newUser.country, newUser.password]);
-        res.redirect('/profile');
+        if (!req.file) {
+        
+          if (isNaN(parseInt(req.body.country, 10))) {
+          
+            const { name, email, password } = req.body;
+            const newUser = {
+                name,
+                email,
+                password
+            };
+            console.log(newUser);
+            await db.query('UPDATE users SET name = ?, email = ?, password = SHA(?) where id_user = ?', [newUser.name, newUser.email, newUser.password, globalIdUser]);
+            res.redirect('/profile');
+    
+          } else {
+            const { name, email, country, password } = req.body;
+            const newUser = {
+                name,
+                email,
+                country,
+                password
+            };
+            console.log(newUser);
+            await db.query('UPDATE users SET name = ?, email = ?, country = ?, password = SHA(?) where id_user = ?', [newUser.name, newUser.email, newUser.country, newUser.password, globalIdUser]);
+            res.redirect('/profile');
+    
+          }
+  
+        } else {
+  
+          const newImagenUser = req.file.originalname;
+          
+          if (isNaN(parseInt(req.body.country, 10))) {
+          
+            const { name, email, password } = req.body;
+            const newUser = {
+                name,
+                email,
+                password
+            };
+            console.log(newUser);
+            await db.query('UPDATE users SET name = ?, email = ?, password = SHA(?), image = ? where id_user = ?', [newUser.name, newUser.email, newUser.password, newImagenUser, globalIdUser]);
+            res.redirect('/profile');
+    
+          } else {
+            const { name, email, country, password } = req.body;
+            const newUser = {
+                name,
+                email,
+                country,
+                password
+            };
+            console.log(newUser);
+            await db.query('UPDATE users SET name = ?, email = ?, country = ?, password = SHA(?), image = ? where id_user = ?', [newUser.name, newUser.email, newUser.country, newUser.password, newImagenUser, globalIdUser]);
+            res.redirect('/profile');
+    
+          }
+  
+        }  
 
       }
+
 
     } catch (error) {
         throw error;
@@ -340,72 +489,89 @@ router.get('/achievements', async (req,res) => {
 
           //TODO LO DEL ADMIN (GET Y POST) 
 
-router.get('/admin', async(req, res) => {
-    const img = await db.query('select image from users where id_user = 8');
-    res.render('admin.ejs', {img:img})
+router.get('/admin', checkAuth, async(req, res) => {
+  
+    
+  try {
+    const events = await db.query('select * from events');
+    const restaurants = await db.query('select id_food, name, coordinate, description, image FROM restaurants');
+    const historicalplaces = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 1');
+    const museums = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 2'); 
+    const monuments = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 3');
+    const theaters = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 4');
+    const towns = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 5');
+
+    const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
+
+    res.render('admin.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns})
+        
+  } catch (error) {
+      throw error;
+  }
 });
 
 // Ruta para manejar la carga de archivos
-router.post('/uploadhistoricals',/*  upload.fields([{ name: 'image_place_historical', maxCount: 1 } , { name: 'model_3d', maxCount: 1 } ]), */ (req, res) => {
-    
-    const name = req.body.namehistorical;
-    console.log(req.body.namehistorical);
-    const coordinate = req.body.coordinate_historical;
-    console.log(coordinate);
-    const description = req.body.description_historical;
-    console.log(description);
-    const namecity = req.body.name_city_historical;
-    console.log(namecity); 
-    const year = req.body.year_construction;
-    console.log(year);
-    const urlvideo = req.body.video_historical;
-    console.log(urlvideo);/* ,
-    
-      image: req.files['image_place_historical'].originalname *//* ,
-      model: req.files['model_3d'][0].originalname */
-    
-  
 
+router.post('/addhistorical', (req, res) => {
+
+});
+
+router.post('/addevent', (req, res) => {
+
+});
+
+router.post('/addrestaurant',uploadRestaurant.single('imagerestaurant'), (req, res) => {
+
+  try {
     
-    // Mover archivos a las carpetas correspondientes en el servidor
-    /* const imageFileHistorical = req.files['image_place_historical'][0]; */
-    /* const model3DFile = req.files['model_3d'][0]; */
-  
-    /* const imagePath = path.join(__dirname, 'static', 'imageshistoricals', imageFileHistorical.originalname); */
-    /* const model3DPath = path.join(__dirname, 'static', 'assets', model3DFile.originalname); */
-  
-    /* imageFileHistorical.mv(imagePath, (err) => {
-      if (err) {
-        console.error('Error al mover la imagen:', err);
-        res.status(500).json({ error: 'Error interno del servidor' });
-      } else {
-        console.log('Imagen movida exitosamente:', imagePath);
-      }
-    }); */
-  
-    /* model3DFile.mv(model3DPath, (err) => {
-      if (err) {
-        console.error('Error al mover el modelo 3D:', err);
-        res.status(500).json({ error: 'Error interno del servidor' });
-      } else {
-        console.log('Modelo 3D movido exitosamente:', model3DPath);
-      }
-    }); */
-  
-    db.query('INSERT INTO historicals SET ?', {name:name, coordinate:coordinate, description:description, namecity:namecity, year:year, urlvideo:urlvideo}, (err, result) => {
-    if (err) {
-      console.error('Error al insertar en la base de datos:', err);
-      res.status(500).json({ error: 'Error interno del servidor' });
-    } else {
-      console.log('Datos históricos insertados en la base de datos:', historicalData);
-      res.json({ message: 'Datos guardados con éxito.' });
-    }
-  });
+    const { namerestaurant, coordenatesrestaurant, descriptionrestaurant } = req.body;
+      const newRestaurant = {
+        namerestaurant,
+        coordenatesrestaurant,
+        descriptionrestaurant
+    };
+
+    const newImageRestaurant = req.file.originalname;
+
+    console.log(newRestaurant);
+    console.log(newImageRestaurant);
+    
+    res.redirect('/admin');
+    
+  } catch (error) {
+      throw error;
+  }
+});
+
+router.post('/uploadhistorical', (req, res) => {
+
+});
+
+router.post('/uploadevent', (req, res) => {
+
+});
+
+router.post('/uploadrestaurant', (req, res) => {
+
+});
+
+router.post('/deletehistorical', (req, res) => {
+
+});
+
+router.post('/deleteevent', (req, res) => {
+
+});
+
+router.post('/deleterestaurant', (req, res) => {
+
+  console.log("Deleted");
+
 });
   
   
 
-
+   //AQUI TERMINA TODO LO DEL ADMIN
 
 
   //PRUEBAS CON OTRAS PAGINAS QUE NO PERTENECERAN AL INTEGRADOR
@@ -413,29 +579,51 @@ router.post('/uploadhistoricals',/*  upload.fields([{ name: 'image_place_histori
 
 //MAPA DE CHUY
 
-router.get('/mapchuy', (req, res) => {
+router.get('/mapchuy', checkAuth, (req, res) => {
   res.render('mapchuy.ejs');
 });
 
 //MAPA DE PRUEBA
 
-router.get('/mapprueba', (req, res) => {
+router.get('/mapprueba', checkAuth, (req, res) => {
   res.render('mapprueba.ejs');
 });
+
+router.get('/admincopy', checkAuth, async(req, res) => {
+  
+    
+  try {
+    const events = await db.query('select * from events');
+    const restaurants = await db.query('select id_food, name, coordinate, description, image FROM restaurants');
+    const historicalplaces = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 1');
+    const museums = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 2'); 
+    const monuments = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 3');
+    const theaters = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 4');
+    const towns = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 5');
+
+    const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
+
+    res.render('admincopy.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns})
+        
+  } catch (error) {
+    throw error;
+  }
+});
+
 
 
 //TERMINA COSAS DE MAPAS
 
 //MODELO 3D
-router.get('/model', (req, res) => {
+router.get('/model', checkAuth, (req, res) => {
   res.render('model.ejs')
 });
 
-router.get('/model2', (req, res) => {
+router.get('/model2', checkAuth, (req, res) => {
   res.render('model2.ejs');
 });
 
-router.get('/model4', (req, res) => {
+router.get('/model4', checkAuth, (req, res) => {
   res.render('model4.ejs');
 });
 
