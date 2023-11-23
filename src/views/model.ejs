@@ -87,7 +87,13 @@
           }
         </style>
 
-      <model-viewer id="mi-modelo" src="../../static/assets/among_us_3d_modelo_con_esqueleto.glb" ar ar-modes="scene-viewer webxr quick-look" camera-controls poster="poster.webp" shadow-intensity="1">
+        <% if (models && models.length > 0) { %>
+          <model-viewer id="mi-modelo" src="../../static/assets/<%= models[0].model %>" ar ar-modes="scene-viewer webxr quick-look" camera-controls poster="poster.webp" shadow-intensity="1">
+        <% } else { %>
+          <!-- Manejar el caso en que models no tiene datos -->
+          <p>No hay modelos disponibles.</p>
+        <% } %>
+
         <div class="progress-bar hide" slot="progress-bar">
             <div class="update-bar"></div>
         </div>

@@ -63,7 +63,8 @@ db.query = promisify(db.query); //AGREGADO
 
       //Esta cosa destruye la session
 
-      var { globalIdUser } = require('global');
+      /* var { globalIdUser } = require('global'); */
+      const globalIdUser = 3;
 
       const checkAuth = (req, res, next) => {
         console.log(checkAuth);
@@ -137,7 +138,7 @@ router.post('/login', (req, res) => {   //Funcion para verificar el login del us
           } else {
             // Login correcto
             globalIdUser = resultado[0].id_user;
-            req.session.loggedIn = true;      //VERIFICA EL LOGGIN 
+            /* req.session.loggedIn = true; */      //VERIFICA EL LOGGIN 
 
             res.redirect('/homeu');
           }
@@ -254,16 +255,53 @@ router.post('/register', (req, res) => {    //Funcion que ejecuta el registro de
 
   router.get('/historicals/:id_historical', checkAuth, async(req, res) => {
     try {
-      const historical = await db.query('SELECT * FROM gethistorical WHERE id_historical = ?',[req.params.id_historical]);
-
-      const model = await db.query('SELECT model FROM models WHERE id_historical = ?',[req.params.id_historical]);
-
+      
+     
+      const models = await db.query('SELECT id_historical, model FROM models WHERE id_historical = ?',[req.params.id_historical]);
       const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
-      res.render('historicals.ejs', {img: img, historical: historical, model: model});
+      const historical = await db.query('SELECT * FROM gethistorical WHERE id_historical = ?',[req.params.id_historical]);
+      const achievement = await db.query('SELECT id_user FROM users_achievements WHERE id_historical = ?',[req.params.id_historical]);
+
+      res.render('historicals.ejs', {img: img, historical: historical, models: models, achievement: achievement});
+
     } catch (error) {
         throw error;
     }
   });
+
+  router.get('/model/:id_historical', checkAuth, async(req, res) => {
+
+    try {
+      const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
+      const models = await db.query('SELECT model FROM models WHERE id_historical = ?',[req.params.id_historical]);
+      res.render('model.ejs', {img: img, models: models})
+
+    } catch (error) {
+        throw error;
+    }
+
+  });
+
+  router.post('/getachievement', async(req, res) => {
+
+    try {
+      const achievementHistorical = req.body.id_historical;
+
+      await db.query('INSERT INTO users_achievements (id_user, id_historical, active) VALUES (?, ?, 1)', [globalIdUser, achievementHistorical]);
+
+      const models = await db.query('SELECT id_historical, model FROM models WHERE id_historical = ?',[achievementHistorical]);
+      const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
+      const historical = await db.query('SELECT * FROM gethistorical WHERE id_historical = ?',[achievementHistorical]);
+      const achievement = await db.query('SELECT id_user FROM users_achievements WHERE id_historical = ?',[achievementHistorical]);
+
+      res.render('historicals.ejs', {img: img, historical: historical, models: models, achievement: achievement});
+
+    } catch (error) {
+        throw error;
+    }
+
+  });
+
 
  //AQUI TERMINA TODO LO DEL MAPA
 
@@ -311,10 +349,12 @@ router.get('/achievements', checkAuth, async (req,res) => {
 
   router.get('/profile', checkAuth, async(req, res) => {
     try {
+
         const user8 = await db.query('SELECT name, email, (SELECT name FROM countries WHERE id_country = (SELECT country FROM users WHERE id_user = ?)) as country FROM users where id_user = ?', [globalIdUser, globalIdUser]);
 
         const logros = await db.query('CALL getLogros(?, @logros)', [globalIdUser]);
         const resultado = await db.query('SELECT @logros as logros');
+        console.log(resultado);
         
         const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
         console.log(img);
@@ -615,9 +655,7 @@ router.get('/admincopy', checkAuth, async(req, res) => {
 //TERMINA COSAS DE MAPAS
 
 //MODELO 3D
-router.get('/model', checkAuth, (req, res) => {
-  res.render('model.ejs')
-});
+
 
 router.get('/model2', checkAuth, (req, res) => {
   res.render('model2.ejs');
@@ -627,6 +665,9 @@ router.get('/model4', checkAuth, (req, res) => {
   res.render('model4.ejs');
 });
 
+router.get('/support', checkAuth, (req, res) => {
+  res.render('support.ejs');
+});
 //EL HISTORICAL DE PRUEBA QUE TIENE LA CATEDRAL
 
 
