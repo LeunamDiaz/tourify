@@ -64,7 +64,7 @@ db.query = promisify(db.query); //AGREGADO
       //Esta cosa destruye la session
 
       /* var { globalIdUser } = require('global'); */
-      const globalIdUser = 3;
+      let globalIdUser = 3;
 
       const checkAuth = (req, res, next) => {
         console.log(checkAuth);
@@ -193,7 +193,7 @@ router.post('/register', (req, res) => {    //Funcion que ejecuta el registro de
               res.render('register', { emailRegistrado });
           } else {
               // Intentar insertar un nuevo usuario
-              const registerSQL = 'INSERT INTO users (name, password, email, image, country, active) VALUES (?, SHA(?), ?, "user.png", 42, 1)';
+              const registerSQL = 'INSERT INTO users (name, password, email, image, country, active, role) VALUES (?, SHA(?), ?, "user.png", 42, 1, 1)';
               const valores = [name, password, email];
               db.query(registerSQL, valores, (error, resultado) => {
                   if (error) {
@@ -255,7 +255,6 @@ router.post('/register', (req, res) => {    //Funcion que ejecuta el registro de
 
   router.get('/historicals/:id_historical', checkAuth, async(req, res) => {
     try {
-      
      
       const models = await db.query('SELECT id_historical, model FROM models WHERE id_historical = ?',[req.params.id_historical]);
       const img = await db.query('select name, image from users where id_user = ?',[globalIdUser]);
@@ -583,11 +582,11 @@ router.post('/addrestaurant',uploadRestaurant.single('imagerestaurant'), (req, r
   }
 });
 
-router.post('/uploadhistorical', (req, res) => {
+router.post('/uploadhistorical',uploadHistorical.single('imagerestaurant'), (req, res) => {
 
 });
 
-router.post('/uploadevent', (req, res) => {
+router.post('/uploadevent',uploadEvent.single('imagerestaurant'), (req, res) => {
 
 });
 
