@@ -80,14 +80,14 @@
                 </div>
                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
                   <li>
-                    <a href="/profile" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+                    <a href="/profile" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mi perfil</a>
                   </li>
                   <li>
-                    <a href="/profile#bottom" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Support</a>
+                    <a href="/profile#bottom" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Soporte</a>
                   </li>
                 </ul>
                 <div class="py-1">
-                  <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+                  <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Cerrar sesión</a>
                   <div id="userLocation"></div>
                 </div>
                 
@@ -116,6 +116,11 @@
         <li>
           <a href="/events" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Events</a>
         </li>
+        <% if (img[0].role === 2) { %>
+          <li>
+            <a href="/admin" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Admin</a>
+          </li>
+        <% } %>
       </ul>
     </div>
     </div>
@@ -136,9 +141,55 @@
 
    <script>
 
+function calcularDistancia(lat1, lon1, lat2, lon2) {
+    // Radio de la Tierra en kilómetros
+    const radioTierra = 6371;
+
+    // Convertir las coordenadas de grados a radianes
+    const latitud1Rad = toRadians(lat1);
+    const longitud1Rad = toRadians(lon1);
+    const latitud2Rad = toRadians(lat2);
+    const longitud2Rad = toRadians(lon2);
+
+    // Diferencias de coordenadas
+    const latitudDif = latitud2Rad - latitud1Rad;
+    const longitudDif = longitud2Rad - longitud1Rad;
+
+    // Fórmula de la distancia haversine
+    const a = Math.sin(latitudDif / 2) * Math.sin(latitudDif / 2) +
+            Math.cos(latitud1Rad) * Math.cos(latitud2Rad) *
+            Math.sin(longitudDif / 2) * Math.sin(longitudDif / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    // Distancia en kilómetros
+    const distancia = radioTierra * c;
+
+    return distancia;
+}
+
+function toRadians(grados) {
+    return grados * (Math.PI / 180);
+}
+
+
+/* let coordInitial;
+
+       if (req.id_event) {
+        
+        coordInitial = events.coordinate;
+
+      } else {
+       
+        coordInitial = '28.643951810520395, -106.0729363634578';
+        
+      }  */
+
 
       // Obtener la geolocalización 
       navigator.geolocation.getCurrentPosition(function(position) {
+        
+      /* const [latitude, longitude] = coordInitial.split(',').map(coord => parseFloat(coord.trim())); */
 
       var map = L.map('map').setView([28.643951810520395, -106.0729363634578], 15);
 
