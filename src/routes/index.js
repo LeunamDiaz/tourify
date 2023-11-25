@@ -94,11 +94,26 @@ router.get('/', (req, res) => {     //Funcion para renderizar la primera pagina 
 });
 
 
-router.post('/login', passport.authenticate('local', {
-  successRedirect: '/homeu',
-  failureRedirect: '/',
-  failureFlash: true,
-}));
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      // Error del servidor
+      return res.render('login', { errorServidor: true });
+    }
+    if (!user) {
+      // Email o contraseña incorrectos
+      return res.render('login', { errorEmail: true });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        // Error del servidor al iniciar sesión
+        return res.render('login', { errorServidor: true });
+      }
+      // Login exitoso
+      return res.redirect('/homeu');
+    });
+  })(req, res, next);
+});
 
   //AQUI TERMINA TODO LO DEL LOGIN
 
@@ -627,9 +642,11 @@ router.get('/model4', ensureAuthenticated, (req, res) => {
   res.render('model4.ejs');
 });
 
-router.get('/support', ensureAuthenticated, (req, res) => {
-  res.render('support.ejs');
-});
+  router.get('/support', ensureAuthenticated, async(req, res) => {
+    const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
+
+    res.render('support.ejs', {img: img});
+  });
 //EL HISTORICAL DE PRUEBA QUE TIENE LA CATEDRAL
 
 

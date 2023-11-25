@@ -16,73 +16,75 @@
   z-index: 1000; /* Puedes ajustar este valor según sea necesario para que esté por delante de otros elementos */
 }
 
-
 </style>
-    
+
 <nav class="bg-white border-gray-200 dark:bg-gray-900">
-    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    <a href="" class="flex items-center">
-        <img src="../../static/images/logo.png" class="h-12 mr-3" alt="Flowbite Logo" />
-        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Tourify</span>
-    </a>
-    <div class="flex md:order-2">
-        <a>
+  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+  <a href="/homeu" class="flex items-center">
+      <img src="../../static/images/logo.png" class="h-12 mr-3" alt="Flowbite Logo" />
+      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Tourify</span>
+  </a>
+  <div class="flex md:order-2">
+      <a>
+
 
 <div class="flex items-center">
-  <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-full cursor-pointer" src="../../static/images/user.png" alt="User dropdown">
+<img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-full cursor-pointer" src="../../static/usersimages/<%= img[0].image %>" alt="User dropdown">
 </div>
 
-            <!-- Dropdown menu -->
-            <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                <div class="py-3 text-sm text-gray-900 dark:text-white">
-                  <div>Traveler</div>
-                  <div class="font-medium truncate"></div>
-                </div>
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
-                  <li>
-                    <a href="/profile" class="block  py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mi perfil</a>
-                  </li>
-                  <li>
-                    <a href="/profile" class="block  py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Soporte</a>
-                  </li>
-                </ul>
-                <div class="py-1">
-                  <a href="/logout" class="block  py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Cerrar sesión</a>
-                </div>
-            </div>
-                        
-        </a>
-         
-        <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
-          <span class="sr-only">Open main menu</span>
-          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-          </svg>
-      </button>
-    </div>
-    <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-      <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <!-- Dropdown menu -->
+          <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+              <div class="px-4 py-3 text-sm text-gray-900 dark:text-white text-center">
+                <div>| <%= img[0].name %> |</div>
+                <div class="font-medium truncate"></div>
+              </div>
+              <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                <li>
+                  <a href="/profile" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mi perfil</a>
+                </li>
+                <% if (img[0].role === 2) { %>
+                  <div>
+                    <a href="/support" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Comentarios</a>
+                  </div>
+                  <% } %>
+              </ul>
+              <div class="py-1">
+                <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Cerrar sesión</a>
+              </div>
+          </div>
+                      
+      </a>
+       
+      <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+        </svg>
+    </button>
+  </div>
+  <div class="items-center justify-betw  0een hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+    <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+      <li>
+        <a href="/homeu" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" aria-current="page">Home</a>
+      </li>
+      <li>
+        <a href="/map" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Map</a>
+      </li>
+      <li>
+        <a href="/achievements" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Achievements</a>
+      </li>
+      <li>
+        <a href="/events" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Events</a>
+      </li>
+      <% if (img[0].role === 2) { %>
         <li>
-          <a href="/homeu" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
+          <a href="/admin" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Admin</a>
         </li>
-        <li>
-          <a href="/map" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Map</a>
-        </li>
-        <li>
-          <a href="/achievements" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Achievements</a>
-        </li>
-        <li>
-          <a href="/events" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Events</a>
-        </li>
-        <% if (img[0].role === 2) { %>
-          <li>
-            <a href="/admin" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Admin</a>
-          </li>
-        <% } %>
-      </ul>
-    </div>
-    </div>
-  </nav>
+      <% } %>
+    </ul>
+  </div>
+  </div>
+</nav>
   
   
   <div class="bg-gray-800 items-center justify-center">
