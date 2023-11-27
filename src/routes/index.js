@@ -19,6 +19,8 @@ const storageProfile = multer.diskStorage({
 });
 const uploadProfile = multer({ storage: storageProfile });
 
+
+
 const storageHistoricals = multer.diskStorage({
   destination: function (req, file, cb) {
       cb(null, 'static/imageshistoricals'); // Ruta donde se guardarán las imágenes de historicals
@@ -28,6 +30,20 @@ const storageHistoricals = multer.diskStorage({
   }
 });
 const uploadHistorical = multer({ storage: storageHistoricals });
+
+
+
+const storageHistoricalsmodel = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'static/assets'); // Ruta donde se guardarán las imágenes de historicals
+  },
+  filename: function (req, file, cb) {
+      cb(null, file.originalname);
+  }
+});
+const uploadHistoricalmodel = multer({ storage: storageHistoricalsmodel });
+
+
 
 const storageRestaurants = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -210,7 +226,7 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
     }
   });
 
-  router.get('/map/:id_event', ensureAuthenticated, async(req, res) => {     //Renderiza pagina del mapa con las marcas correspondientes (get)
+  router.get('/map/:id_evento', ensureAuthenticated, async(req, res) => {     //Renderiza pagina del mapa con las marcas correspondientes (get)
     
     try {
       const events = await db.query('select * from events');
@@ -223,7 +239,10 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
 
       const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
 
-      res.render('map.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns})
+      const idevento = [req.params.id_evento];
+      console.log(idevento);
+
+      res.render('map.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns, idevento: idevento})
           
     } catch (error) {
       throw error;
@@ -507,52 +526,78 @@ router.get('/achievements', ensureAuthenticated, async (req,res) => {
           //TODO LO DEL ADMIN (GET Y POST) 
 
 router.get('/admin', ensureAuthenticated, async(req, res) => {
-  
+
+    const rol = await db.query('select role from users where id_user = ?', [req.user.id_user]);
+
+    if (rol[0].role === 2) {
+      
+      try {
+        const events = await db.query('select * from events');
+        const restaurants = await db.query('select id_food, name, coordinate, description, image FROM restaurants');
+        const historicalplaces = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 1');
+        const museums = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 2'); 
+        const monuments = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 3');
+        const theaters = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 4');
+        const towns = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 5');
     
-  try {
-    const events = await db.query('select * from events');
-    const restaurants = await db.query('select id_food, name, coordinate, description, image FROM restaurants');
-    const historicalplaces = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 1');
-    const museums = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 2'); 
-    const monuments = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 3');
-    const theaters = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 4');
-    const towns = await db.query('select id_historical, name, coordinate, pintype, image from historicals where pintype = 5');
+        const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
+    
+        res.render('admin.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns})
+            
+      } catch (error) {
+          throw error;
+      }
 
-    const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
 
-    res.render('admin.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns})
-        
-  } catch (error) {
-      throw error;
-  }
+    } else {
+
+      res.redirect('/homeu');
+      
+    }
+
 });
 
 // Ruta para manejar la carga de archivos
 
-router.post('/addhistorical', (req, res) => {
+router.post('/addhistorical', uploadHistorical.single('imagehistorical'), async(req, res) => {
+
+  try {
+    
+    const { namehistorical, coordinatehistorical, descriptionhistorical, typehistorical, yearhistorical, urlhistorical} = req.body;
+    const newImageHistorical = req.file.originalname;
+    await db.query('INSERT INTO historicals (name, coordinate, description, pintype, year, urlvideo, image, active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)', [namehistorical, coordinatehistorical, descriptionhistorical, typehistorical, yearhistorical, urlhistorical, newImageHistorical]);
+    res.redirect('/admin');
+  } catch (error) {
+      throw error;
+  }
 
 });
 
-router.post('/addevent', (req, res) => {
+router.post('/addevent',uploadEvent.single('imageevent'), async(req, res) => {
+
+  try {
+    
+    const { nameevent, coordinateevent, descriptionevent, dateevent} = req.body;
+    const newImageEvent = req.file.originalname;
+
+    await db.query('INSERT INTO events (name, coordinate, description, image, dateend, active) VALUES (?, ?, ?, ?, ?, 1)', [nameevent, coordinateevent, descriptionevent, newImageEvent, dateevent]);
+    res.redirect('/admin');
+    
+  } catch (error) {
+      throw error;
+  }
 
 });
 
-router.post('/addrestaurant',uploadRestaurant.single('imagerestaurant'), (req, res) => {
+router.post('/addrestaurant',uploadRestaurant.single('imagerestaurant'), async(req, res) => {
 
   try {
     
     const { namerestaurant, coordenatesrestaurant, descriptionrestaurant } = req.body;
-      const newRestaurant = {
-        namerestaurant,
-        coordenatesrestaurant,
-        descriptionrestaurant
-    };
-
     const newImageRestaurant = req.file.originalname;
-
-    console.log(newRestaurant);
     console.log(newImageRestaurant);
-    
+
+    await db.query('INSERT INTO restaurants (name, coordinate, description, image, active) VALUES (?, ?, ?, ?, 1)', [namerestaurant, coordenatesrestaurant, descriptionrestaurant, newImageRestaurant]);
     res.redirect('/admin');
     
   } catch (error) {
@@ -560,32 +605,67 @@ router.post('/addrestaurant',uploadRestaurant.single('imagerestaurant'), (req, r
   }
 });
 
-router.post('/uploadhistorical',uploadHistorical.single('imagerestaurant'), (req, res) => {
+router.get('/deletehistorical/:id_historical', async(req, res) => {
+
+  try {
+
+    const id_historica = req.params.id_historical;
+    await db.query('DELETE FROM historicals WHERE id_historical = ?', [id_historica]);
+
+    res.redirect('/admin');
+    
+  } catch (error) {
+      throw error;
+    
+  }
 
 });
 
-router.post('/uploadevent',uploadEvent.single('imagerestaurant'), (req, res) => {
+router.get('/deleteevent/:id_event', async(req, res) => {
+
+  try {
+
+    const id_evento = req.params.id_event;
+    await db.query('DELETE FROM events WHERE id_event = ?', [id_evento]);
+
+    res.redirect('/admin');
+    
+  } catch (error) {
+      throw error;
+    
+  }
 
 });
 
-router.post('/uploadrestaurant', (req, res) => {
+router.get('/deleterestaurant/:id_restaurant', async(req, res) => {
 
-});
+  try {
 
-router.post('/deletehistorical', (req, res) => {
+    const id_restaurante = req.params.id_restaurant;
+    await db.query('DELETE FROM restaurants WHERE id_food = ?', [id_restaurante]);
 
-});
-
-router.post('/deleteevent', (req, res) => {
-
-});
-
-router.post('/deleterestaurant', (req, res) => {
-
-  console.log("Deleted");
+    res.redirect('/admin');
+    
+  } catch (error) {
+      throw error;
+    
+  }
 
 });
   
+
+
+router.post('/uploadhistorical/:id_historical', (req, res) => {
+
+});
+
+router.post('/uploadevent/:id_event', (req, res) => {
+
+});
+
+router.post('/uploadrestaurant/:id_restaurant', (req, res) => {
+
+});
   
 
    //AQUI TERMINA TODO LO DEL ADMIN

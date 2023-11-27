@@ -7,12 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css"  rel="stylesheet" />
     <link rel="website icon" type="png" href="../../static/images/logo.png">
+    <script src="//cdn.tailwindcss.com"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
     <style>body {
       background-color: #111827;
     }
     </style>
     
 </head>
+
 <body>
 
        
@@ -84,7 +87,18 @@
     </div>
   </nav>
 
+  <script>
+    if (window.location.pathname === "/model/:id_historical") {
+      document.write('<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"><\/script>');
+    } else {
+      
+      document.write('<script type="module" src="http://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"><\/script>');
+    }
+  </script>
+  
 
+
+  
   <div class="container mx-auto">
 
         <style>
@@ -107,11 +121,30 @@
         <button slot="ar-button" id="ar-button" class="bg-blue-500 text-white font-bold px-4 py-2 rounded flex-wrap">
           
           <img src="https://modelviewer.dev/shared-assets/icons/hand.png">
-            View in your space
+          ¡Pruébalo con realidad aumentada!
         </button>
       </model-viewer>
 
   </div>
+
+  <script>
+
+const modeloViewer = document.getElementById("mi-modelo");
+
+modeloViewer.addEventListener("load", () => {
+  // Oculta la barra de progreso una vez que el modelo está cargado
+  document.querySelector(".progress-bar").classList.add("hide");
+});
+
+modeloViewer.addEventListener("progress", (event) => {
+  // Muestra la barra de progreso y ajusta su tamaño según el progreso de carga
+  const progress = event.loaded / event.total * 100;
+  const updateBar = document.querySelector(".update-bar");
+  updateBar.style.width = `${progress}%`;
+  document.querySelector(".progress-bar").classList.remove("hide");
+});
+
+  </script>
 
   <!-- Import the component -->
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>

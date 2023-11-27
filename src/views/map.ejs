@@ -55,6 +55,13 @@
                   padding: 0;
               }
 
+        .leaflet-popup-content a.leaflet-popup-link {
+          color: white; 
+        }
+        .leaflet-container a {
+          color: white;
+        }  
+
     </style>
 
 
@@ -143,38 +150,6 @@
 
    <script>
 
-function calcularDistancia(lat1, lon1, lat2, lon2) {
-    // Radio de la Tierra en kilómetros
-    const radioTierra = 6371;
-
-    // Convertir las coordenadas de grados a radianes
-    const latitud1Rad = toRadians(lat1);
-    const longitud1Rad = toRadians(lon1);
-    const latitud2Rad = toRadians(lat2);
-    const longitud2Rad = toRadians(lon2);
-
-    // Diferencias de coordenadas
-    const latitudDif = latitud2Rad - latitud1Rad;
-    const longitudDif = longitud2Rad - longitud1Rad;
-
-    // Fórmula de la distancia haversine
-    const a = Math.sin(latitudDif / 2) * Math.sin(latitudDif / 2) +
-            Math.cos(latitud1Rad) * Math.cos(latitud2Rad) *
-            Math.sin(longitudDif / 2) * Math.sin(longitudDif / 2);
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    // Distancia en kilómetros
-    const distancia = radioTierra * c;
-
-    return distancia;
-}
-
-function toRadians(grados) {
-    return grados * (Math.PI / 180);
-}
-
-
 /* let coordInitial;
 
        if (req.id_event) {
@@ -189,10 +164,12 @@ function toRadians(grados) {
 
 
       // Obtener la geolocalización 
-      navigator.geolocation.getCurrentPosition(function(position) {
+     /*  navigator.geolocation.getCurrentPosition(function(position) { */
         
       /* const [latitude, longitude] = coordInitial.split(',').map(coord => parseFloat(coord.trim())); */
 
+
+      
       var map = L.map('map').setView([28.643951810520395, -106.0729363634578], 15);
 
       //DECLARACION DE TODOS LOS ICONOS DE LAS MARCAS
@@ -261,49 +238,49 @@ function toRadians(grados) {
 
         <% restaurants.forEach(restaurant => { %>
         L.marker([<%= restaurant.coordinate %>], { icon: restaurantIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">COMIDA</span></div><div class="block px-4 py-2 text-center text-blue font-semibold"><%= restaurant.name %></div>   <div class="text-center"><img src="../../static/imagesrestaurants/<%= restaurant.image %>" alt="<%= restaurant.name %>" class="mx-auto" width="300" /><p><%= restaurant.description %></p></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-green-700">COMIDA</span></div><div class="block px-4 py-2 text-center font-semibold text-lg text-blue-900 hover:text-blue-900 transition duration-300 ease-in-out"><%= restaurant.name %></div>   <div class="text-center"><img src="../../static/imagesrestaurants/<%= restaurant.image %>" alt="<%= restaurant.name %>" class="mx-auto" width="300" /><p><%= restaurant.description %></p></div>');
         <% }); %>
 
         //EVENTOS MARCAS
         
         <% events.forEach(evento => { %>
         L.marker([<%= evento.coordinate %>], { icon: eventIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">EVENTO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= evento.name %></a>   <div class="text-center"><img src="../../static/imagesevents/<%= evento.image %>" alt="<%= evento.name %>" class="mx-auto" width="300" /><p><%= evento.description %></p></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-green-700">EVENTO</span></div><div class="block px-4 py-2 text-center font-semibold text-lg text-blue-900 hover:text-blue-900 transition duration-300 ease-in-out"><%= evento.name %></div>   <div class="text-center"><img src="../../static/imagesevents/<%= evento.image %>" alt="<%= evento.name %>" class="mx-auto" width="300" /><p><%= evento.description %></p></div>');
         <% }); %>
         
         //LUGARES HISTORICOS MARCAS
         
         <% historicalplaces.forEach(historicalplace => { %>
         L.marker([<%= historicalplace.coordinate %>], { icon: parchmentIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">LUGAR HISTORICO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= historicalplace.name %></a>   <div class="text-center"><img src="../../static/imageshistoricals/<%= historicalplace.image %>" alt="<%= historicalplace.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= historicalplace.id_historical %>">Presiona para ver mas información</a></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-blue-700">LUGAR HISTORICO</span></div><div class="block px-4 py-2 text-center font-semibold text-base text-black hover:text-blue-900 transition duration-300 ease-in-out"><%= historicalplace.name %></div>   <div class="text-center"><img src="../../static/imageshistoricals/<%= historicalplace.image %>" alt="<%= historicalplace.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= historicalplace.id_historical %>" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900"">Ver más</a></div>');
         <% }); %>
 
           //MUSEOS MARCAS
 
         <% museums.forEach(museum => { %>
         L.marker([<%= museum.coordinate %>], { icon: museumIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">MUSEO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= museum.name %></a>   <div class="text-center"><img src="../../static/imageshistoricals/<%= museum.image %>" alt="<%= museum.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= museum.id_historical %>">Presiona para ver mas información</a></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-blue-700">MUSEO</span></div><div class="block px-4 py-2 text-center font-semibold text-base text-black hover:text-blue-900 transition duration-300 ease-in-out"><%= museum.name %></div>   <div class="text-center"><img src="../../static/imageshistoricals/<%= museum.image %>" alt="<%= museum.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= museum.id_historical %>" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900"">Ver más</a></div>');
         <% }); %>
 
         //MONUMENTOS MARCAS
 
         <% monuments.forEach(monument => { %>
         L.marker([<%= monument.coordinate %>], { icon: monumentIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">MONUMENTO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= monument.name %></a>   <div class="text-center"><img src="../../static/imageshistoricals/<%= monument.image %>" alt="<%= monument.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= monument.id_historical %>">Presiona para ver mas información</a></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-blue-700">MONUMENTO</span></div><div class="block px-4 py-2 text-center font-semibold text-base text-black hover:text-blue-900 transition duration-300 ease-in-out"><%= monument.name %></div>   <div class="text-center"><img src="../../static/imageshistoricals/<%= monument.image %>" alt="<%= monument.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= monument.id_historical %>" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900"">Ver más</a></div>');
         <% }); %>
 
           //TEATROS MARCAS
 
         <% theaters.forEach(theater => { %>
         L.marker([<%= theater.coordinate %>], { icon: theatreIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">TEATRO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= theater.name %></a>   <div class="text-center"><img src="../../static/imageshistoricals/<%= theater.image %>" alt="<%= theater.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= theater.id_historical %>">Presiona para ver mas información</a></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-blue-700">TEATRO</span></div><div class="block px-4 py-2 text-center font-semibold text-base text-black hover:text-blue-900 transition duration-300 ease-in-out"><%= theater.name %></div>   <div class="text-center"><img src="../../static/imageshistoricals/<%= theater.image %>" alt="<%= theater.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= theater.id_historical %>" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900"">Ver más</a></div>');
         <% }); %>
 
           //PUEBLOS MAGICOS MARCAS
 
           <% towns.forEach(town => { %>
         L.marker([<%= town.coordinate %>], { icon: townIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">PUEBLO MAGICO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= town.name %></a>   <div class="text-center"><img src="../../static/imageshistoricals/<%= town.image %>" alt="<%= town.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= town.id_historical %>">Presiona para ver mas información</a></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-blue-700">PUEBLO MAGICO</span></div><div class="block px-4 py-2 text-center font-semibold text-base text-black hover:text-blue-900 transition duration-300 ease-in-out"><%= town.name %></div>   <div class="text-center"><img src="../../static/imageshistoricals/<%= town.image %>" alt="<%= town.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= town.id_historical %>" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900"">Ver más</a></div>');
         <% }); %>
 
 
@@ -324,12 +301,12 @@ function toRadians(grados) {
               //Se añaden todas las marcas al mapa
         
                 Jawg_Sunny.addTo(map);
-                
-                /* map.locate({setView: true, maxZoom: 16});
+                /* 
+                map.locate({setView: true, maxZoom: 16});
 
                 function onLocationFound(e) {
-                    var userLocation = e.latlng;
-                    var radius = e.accuracy / 2;
+                    var userLocation = [28.632218049278386, -106.07333149457398];
+                    var radius = e.accuracy / 10;
 
                     L.marker(userLocation).addTo(map)
                         .bindPopup("Estás dentro de " + radius + " metros de este punto").openPopup();
@@ -337,9 +314,10 @@ function toRadians(grados) {
                     L.circle(userLocation, radius).addTo(map);
                 }
 
-                map.on('locationfound', onLocationFound); */
+                map.on('locationfound', onLocationFound);
+                L.control.locate().addTo(map); */
 
-                L.geolet({ position: 'bottomleft' }).addTo(map);});
+                L.geolet({ position: 'bottomleft' }).addTo(map);/* }); */
 
 
    </script>

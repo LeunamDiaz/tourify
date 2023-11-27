@@ -62,6 +62,14 @@
               }
               
 
+        .leaflet-popup-content a.leaflet-popup-link {
+          color: white; 
+        }
+        .leaflet-container a {
+          color: white;
+        }   
+
+      
     </style>
 
 
@@ -140,6 +148,7 @@
 <!-- Configuraciones del mapa -->
 
 <body>
+  
   <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -219,49 +228,49 @@
 
         <% restaurants.forEach(restaurant => { %>
         L.marker([<%= restaurant.coordinate %>], { icon: restaurantIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">COMIDA</span></div><div class="block px-4 py-2 text-center text-blue font-semibold"><%= restaurant.name %></div>   <div class="text-center"><img src="../../static/imagesrestaurants/<%= restaurant.image %>" alt="<%= restaurant.name %>" class="mx-auto" width="300" /><p><%= restaurant.description %></p></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-green-700">COMIDA</span></div><div class="block px-4 py-2 text-center font-semibold text-lg text-blue-900 hover:text-blue-900 transition duration-300 ease-in-out"><%= restaurant.name %></div>   <div class="text-center"><img src="../../static/imagesrestaurants/<%= restaurant.image %>" alt="<%= restaurant.name %>" class="mx-auto" width="300" /><p><%= restaurant.description %></p> <a href="/deleterestaurant/<%= restaurant.id_food %>" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar marca</a> </div>');
         <% }); %>
 
         //EVENTOS MARCAS
         
         <% events.forEach(evento => { %>
         L.marker([<%= evento.coordinate %>], { icon: eventIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">EVENTO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= evento.name %></a>   <div class="text-center"><img src="../../static/imagesevents/<%= evento.image %>" alt="<%= evento.name %>" class="mx-auto" width="300" /><p><%= evento.description %></p></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-green-700">EVENTO</span></div><div class="block px-4 py-2 text-center font-semibold text-lg text-blue-900 hover:text-blue-900 transition duration-300 ease-in-out"><%= evento.name %></div>   <div class="text-center"><img src="../../static/imagesevents/<%= evento.image %>" alt="<%= evento.name %>" class="mx-auto" width="300" /><p><%= evento.description %></p>  <a href="/deleteevent/<%= evento.id_event %>" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar marca</a>  </div>');
         <% }); %>
         
         //LUGARES HISTORICOS MARCAS
         
         <% historicalplaces.forEach(historicalplace => { %>
         L.marker([<%= historicalplace.coordinate %>], { icon: parchmentIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">LUGAR HISTORICO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= historicalplace.name %></a>   <div class="text-center"><img src="../../static/imageshistoricals/<%= historicalplace.image %>" alt="<%= historicalplace.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= historicalplace.id_historical %>">Presiona para ver mas información</a></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-blue-700">LUGAR HISTORICO</span></div><div class="block px-4 py-2 text-center font-semibold text-base text-black hover:text-blue-900 transition duration-300 ease-in-out"><%= historicalplace.name %></div>   <div class="text-center"><img src="../../static/imageshistoricals/<%= historicalplace.image %>" alt="<%= historicalplace.name %>" class="mx-auto" width="300" /><p></p><a href="/deletehistorical/<%= historicalplace.id_historical %>" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar marca</a></div>');
         <% }); %>
 
           //MUSEOS MARCAS
 
         <% museums.forEach(museum => { %>
         L.marker([<%= museum.coordinate %>], { icon: museumIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">MUSEO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= museum.name %></a>   <div class="text-center"><img src="../../static/imageshistoricals/<%= museum.image %>" alt="<%= museum.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= museum.id_historical %>">Presiona para ver mas información</a></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-blue-700">MUSEO</span></div><div class="block px-4 py-2 text-center font-semibold text-base text-black hover:text-blue-900 transition duration-300 ease-in-out"><%= museum.name %></div>   <div class="text-center"><img src="../../static/imageshistoricals/<%= museum.image %>" alt="<%= museum.name %>" class="mx-auto" width="300" /><p></p><a href="/deletehistorical/<%= museum.id_historical %>" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar marca</a></div>');
         <% }); %>
 
         //MONUMENTOS MARCAS
 
         <% monuments.forEach(monument => { %>
         L.marker([<%= monument.coordinate %>], { icon: monumentIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">MONUMENTO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= monument.name %></a>   <div class="text-center"><img src="../../static/imageshistoricals/<%= monument.image %>" alt="<%= monument.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= monument.id_historical %>">Presiona para ver mas información</a></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-blue-700">MONUMENTO</span></div><div class="block px-4 py-2 text-center font-semibold text-base text-black hover:text-blue-900 transition duration-300 ease-in-out"><%= monument.name %></div>   <div class="text-center"><img src="../../static/imageshistoricals/<%= monument.image %>" alt="<%= monument.name %>" class="mx-auto" width="300" /><p></p><a href="/deletehistorical/<%= monument.id_historical %>" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar marca</a></div>');
         <% }); %>
 
           //TEATROS MARCAS
 
         <% theaters.forEach(theater => { %>
         L.marker([<%= theater.coordinate %>], { icon: theatreIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">TEATRO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= theater.name %></a>   <div class="text-center"><img src="../../static/imageshistoricals/<%= theater.image %>" alt="<%= theater.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= theater.id_historical %>">Presiona para ver mas información</a></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-blue-700">TEATRO</span></div><div class="block px-4 py-2 text-center font-semibold text-base text-black hover:text-blue-900 transition duration-300 ease-in-out"><%= theater.name %></div>   <div class="text-center"><img src="../../static/imageshistoricals/<%= theater.image %>" alt="<%= theater.name %>" class="mx-auto" width="300" /><p></p><a href="/deletehistorical/<%= theater.id_historical %>" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar marca</a></div>');
         <% }); %>
 
           //PUEBLOS MAGICOS MARCAS
 
           <% towns.forEach(town => { %>
         L.marker([<%= town.coordinate %>], { icon: townIcon }).addTo(map)
-        .bindPopup('<div class="m-2"><span class="inline-flex justify-center items-center py-1 px-3 text-base font-medium text-center text-white rounded-lg bg-blue-700">PUEBLO MAGICO</span></div><a class="block px-4 py-2 text-center text-blue font-semibold"><%= town.name %></a>   <div class="text-center"><img src="../../static/imageshistoricals/<%= town.image %>" alt="<%= town.name %>" class="mx-auto" width="300" /><p></p><a href="/historicals/<%= town.id_historical %>">Presiona para ver mas información</a></div>');
+        .bindPopup('<div class="m-2 mb-1"><span class="inline-flex justify-center items-center py-0.5 px-1 text-xs font-medium text-center text-white rounded-lg bg-blue-700">PUEBLO MAGICO</span></div><div class="block px-4 py-2 text-center font-semibold text-base text-black hover:text-blue-900 transition duration-300 ease-in-out"><%= town.name %></div>   <div class="text-center"><img src="../../static/imageshistoricals/<%= town.image %>" alt="<%= town.name %>" class="mx-auto" width="300" /><p></p><a href="/deletehistorical/<%= town.id_historical %>" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar marca</a></div>');
         <% }); %>
 
 
@@ -345,45 +354,42 @@
   <!-- Contenido específico para cada pestaña -->
   <section id="select-content-profile" class="h-40">
       <!-- Contenido de la pestaña Historical -->
-      <form enctype="multipart/form-data" action="/uploadhistoricals" method="POST" >
+      <form enctype="multipart/form-data" action="/addhistorical" method="POST" >
 
           <label for="namehistorical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la Ubicación</label>
-          <input type="text" name="namehistorical" id="namehistorical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Angel de la Independencia" required>
+            <input type="text" id="namehistorical" name="namehistorical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Angel de la Independencia" required>
           <label for="coordinate-historical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Coordenadas</label>
-          <input type="text" name="coordinate-historical" id="coordinate-historical" aria-describedby="helper-text-explanation" class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="28.64186518497492, -106.07286827165497" required>
+            <input type="text" id="coordinatehistorical" name="coordinatehistorical" aria-describedby="helper-text-explanation" class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="28.64186518497492, -106.07286827165497" required>
           
           <label for="description-historical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2 mb-2">Información</label>
             <div class="w-full mb-2 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                 <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                     <label for="description-historical" class="sr-only">Your comment</label>
-                    <textarea id="description-historical" name="description-historical" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Es una de los monumentos más importantes..." required></textarea>
+                      <textarea id="descriptionhistorical" name="descriptionhistorical" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Es una de los monumentos más importantes..." required></textarea>
                 </div>
             </div>
 
           <label for="typepin" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2 mb-2">Tipo de Pin de la Mark</label>
            
-              <select name="typepin" id="typepin"  class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                <option value="">Lugar Historico</option>  
-                <option value="">Museo</option>
-                <option value="">Estatua</option>
-                <option value="">Teatro</option>
-                <option value="">Pueblo Mágico</option>
+              <select id="typehistorical" name="typehistorical" class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                <option value="1">Lugar Historico</option>  
+                <option value="2">Museo</option>
+                <option value="3">Estatua</option>
+                <option value="4">Teatro</option>
+                <option value="5">Pueblo Mágico</option>
               </select>
-            
-            
-          <label for="name_city_historical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la ciudad</label>
-          <input type="text" name="name_city_historical" id="name_city_historical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Chihuahua, Chih." required>
+                        
           <label for="year-construction" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Año de construcción</label>
-          <input type="text" name="year-construction" id="year-construction" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1826" required>
+            <input type="text" id="yearhistorical" name="yearhistorical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="1826" required>
           <label for="video_historical" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">URL del video (Youtube)</label>
-          <input type="text" name="video_historical" id="video_historical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="https://www.youtube.com/..." required> 
+            <input type="text"id="urlhistorical" name="urlhistorical" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="https://www.youtube.com/..." required> 
           <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="image_place_historical">Imágen del lugar</label>
-          <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="image_place_historical" name="image_place_historical" type="file">
+            <input id="imagehistorical" name="imagehistorical"  class="mb-4 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" type="file">
+            <!-- 
           <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="model_3d">Modelo 3D</label>
-          <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 mb-3" id="model_3d" type="file">
-
-          <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-8 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
-          <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full mb text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Borrar</button>
+            <input id="modelhistorical" name="modelhistorical" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 mb-3" type="file">
+ -->
+          <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-24 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
 
         </form>
 
@@ -413,11 +419,8 @@
           <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Imágen</label>
             <input type="file" id="imagerestaurant" name="imagerestaurant" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 mb-3" required>
 
-            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-8 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-24 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
             
-            <a href="/deleterestaurant">
-            <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Borrar</button>
-            </a>
       </form>  
 
 
@@ -429,25 +432,26 @@
   
   <section id="select-content-settings" class="h-40 hidden">
       <!-- Contenido de la pestaña Events -->
+
+      <form action="/addevent" method="POST" enctype="multipart/form-data">
           <label for="helper-text-event" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre del Evento</label>
-          <input type="text" id="helper-text-event" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Feria de Santa Rita">
+            <input type="text" id="nameevent" name="nameevent" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Feria de Santa Rita" required>
           <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2">Coordenadas</label>
-          <input type="text" id="helper-text" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="28.64186518497492, -106.07286827165497">
+            <input type="text" id="coordinateevent" name="coordinateevent" aria-describedby="helper-text-explanation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="28.64186518497492, -106.07286827165497" required>
           <label for="helper-text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2 mb-2">Información</label>
-          <form>
+
             <div class="w-full mb-2 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                 <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                     <label for="comment" class="sr-only">Your comment</label>
-                    <textarea id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Es una de los eventos más importantes..." required></textarea>
+                    <textarea id="descriptionevent" name="descriptionevent" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Es una de los eventos más importantes..." required></textarea>
                 </div>
-  
             </div>
-        </form>
-        <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Imágen</label>
-          <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 mb-3" id="multiple_files" type="file" >
+
+        <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Imágen (1920 x 1080)</label>
+          <input  id="imageevent" name="imageevent" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 mb-3" type="file" required>
   
             
-          <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Fecha de Inicio</label>
+        <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Fecha del evento</label>
 
           <div class="relative max-w-sm">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -455,24 +459,14 @@
                   <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                 </svg>
             </div>
-            <input datepicker datepicker-buttons type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Del 18 de mayo">
+
+            <input datepicker datepicker-buttons id="dateevent" name="dateevent" type="text" class="mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="2023-05-18 00:00:00" required>
           </div>
 
-          <label class="block mb-2 mt-1 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Fecha de Final</label>
-          <div class="relative max-w-sm">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-               <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                </svg>
-            </div>
-            <input datepicker datepicker-buttons type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3" placeholder="al 4 de junio">
-          </div>
+          <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-24 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
+                 
+        </form>  
 
-          
-
-          <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ml-8 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
-          <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Borrar</button>
-    
     </section>
   
 
