@@ -21,7 +21,7 @@ const uploadProfile = multer({ storage: storageProfile });
 
 
 
-const storageHistoricals = multer.diskStorage({
+/* const storageHistoricals = multer.diskStorage({
   destination: function (req, file, cb) {
       cb(null, 'static/imageshistoricals'); // Ruta donde se guardarán las imágenes de historicals
   },
@@ -35,14 +35,38 @@ const uploadHistorical = multer({ storage: storageHistoricals });
 
 const storageHistoricalsmodel = multer.diskStorage({
   destination: function (req, file, cb) {
-      cb(null, 'static/assets'); // Ruta donde se guardarán las imágenes de historicals
+      cb(null, 'static/assets'); //
   },
   filename: function (req, file, cb) {
       cb(null, file.originalname);
   }
 });
-const uploadHistoricalmodel = multer({ storage: storageHistoricalsmodel });
+const uploadHistoricalmodel = multer({ storage: storageHistoricalsmodel }); */
 
+
+
+const storageHistoricals = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const destinationPath = file.fieldname === 'imagehistorical' ? 'static/imageshistoricals' : 'static/assets';
+    cb(null, destinationPath);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.fieldname === 'modelhistorical' && !file.originalname.endsWith('.glb')) {
+    // Reject file if it's not a .glb file for the modelhistorical field
+    return cb(new Error('Only .glb files are allowed for the 3D model.'));
+  }
+  cb(null, true);
+};
+
+const uploadHistorical = multer({ storage: storageHistoricals, fileFilter }).fields([
+  { name: 'imagehistorical', maxCount: 1 },
+  { name: 'modelhistorical', maxCount: 1 }
+]);
 
 
 const storageRestaurants = multer.diskStorage({
@@ -219,7 +243,9 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
 
       const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
 
-      res.render('map.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns})
+      const coordevento = (coordinate = "28.643951810520395, -106.0729363634578");
+      console.log(coordevento);
+      res.render('map.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns, coordevento: coordevento})
           
     } catch (error) {
       throw error;
@@ -240,9 +266,11 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
       const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
 
       const idevento = [req.params.id_evento];
-      console.log(idevento);
+      const coordevento = await db.query('SELECT coordinate FROM events WHERE id_event = ?', [idevento]);
 
-      res.render('map.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns, idevento: idevento})
+      console.log(coordevento);
+
+      res.render('map.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns, coordevento: coordevento})
           
     } catch (error) {
       throw error;
@@ -256,7 +284,7 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
       const models = await db.query('SELECT id_historical, model FROM models WHERE id_historical = ?',[req.params.id_historical]);
       const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
       const historical = await db.query('SELECT * FROM gethistorical WHERE id_historical = ?',[req.params.id_historical]);
-      const achievement = await db.query('SELECT id_user FROM users_achievements WHERE id_historical = ?',[req.params.id_historical]);
+      const achievement = await db.query('SELECT id_user FROM users_achievements WHERE id_historical = ? && id_user = ?',[req.params.id_historical, req.user.id_user]);
 
       res.render('historicals.ejs', {img: img, historical: historical, models: models, achievement: achievement});
 
@@ -278,10 +306,10 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
 
   });
 
-  router.post('/getachievement', async(req, res) => {
+  router.get('/getachievement/:id_historical', async(req, res) => {
 
     try {
-      const achievementHistorical = req.body.id_historical;
+      const achievementHistorical = req.params.id_historical;
 
       await db.query('INSERT INTO users_achievements (id_user, id_historical, active) VALUES (?, ?, 1)', [req.user.id_user, achievementHistorical]);
 
@@ -359,6 +387,18 @@ router.get('/achievements', ensureAuthenticated, async (req,res) => {
     } catch (error) {
         throw error;
     }
+  });
+
+  router.post('/sendcomment', async(req, res) => {
+
+    try {
+      const comentario = req.body.comment;
+      db.query('INSERT INTO comments (id_user, description, active) VALUES (?, ? , 1)', [req.user.id_user, comentario]);
+      res.redirect('/profile');
+    } catch (error) {
+        throw error;
+    }
+
   });
 
  //AQUI TERMINA TODO LO DE PROFILE
@@ -559,13 +599,21 @@ router.get('/admin', ensureAuthenticated, async(req, res) => {
 
 // Ruta para manejar la carga de archivos
 
-router.post('/addhistorical', uploadHistorical.single('imagehistorical'), async(req, res) => {
+router.post('/addhistorical', uploadHistorical, async(req, res) => {
 
   try {
     
     const { namehistorical, coordinatehistorical, descriptionhistorical, typehistorical, yearhistorical, urlhistorical} = req.body;
-    const newImageHistorical = req.file.originalname;
+    const newImageHistorical = req.files['imagehistorical'][0].originalname;
+
+
     await db.query('INSERT INTO historicals (name, coordinate, description, pintype, year, urlvideo, image, active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)', [namehistorical, coordinatehistorical, descriptionhistorical, typehistorical, yearhistorical, urlhistorical, newImageHistorical]);
+
+    const newModelHistorical = req.files['modelhistorical'][0].originalname;
+    const maxima = await db.query('SELECT MAX(id_historical) as id_histori FROM historicals');
+    const idmaxima = maxima[0].id_histori;
+    await db.query('INSERT INTO models (model, id_historical, active) VALUES (?, ?, 1)', [newModelHistorical, idmaxima]);
+    
     res.redirect('/admin');
   } catch (error) {
       throw error;
@@ -653,7 +701,13 @@ router.get('/deleterestaurant/:id_restaurant', async(req, res) => {
 
 });
   
+router.get('/support', ensureAuthenticated, async(req, res) => {
+  const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
 
+  const comentarios = await db.query('SELECT * FROM getcomments');
+
+  res.render('support.ejs', {img: img, comentarios: comentarios});
+});
 
 router.post('/uploadhistorical/:id_historical', (req, res) => {
 
@@ -722,11 +776,7 @@ router.get('/model4', ensureAuthenticated, (req, res) => {
   res.render('model4.ejs');
 });
 
-  router.get('/support', ensureAuthenticated, async(req, res) => {
-    const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
 
-    res.render('support.ejs', {img: img});
-  });
 //EL HISTORICAL DE PRUEBA QUE TIENE LA CATEDRAL
 
 

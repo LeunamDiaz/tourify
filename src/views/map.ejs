@@ -169,8 +169,39 @@
       /* const [latitude, longitude] = coordInitial.split(',').map(coord => parseFloat(coord.trim())); */
 
 
+      /* if (coordevento[0].coordinate) {
+        
+        coordInitial = coordevento[0].coordinate;
+        
+        const [latitude, longitude] = coordInitial.split(',').map(coord => parseFloat(coord.trim()));
+      } else {
+       
+        coordInitial = '28.643951810520395, -106.0729363634578';
+        
+      } */
       
-      var map = L.map('map').setView([28.643951810520395, -106.0729363634578], 15);
+
+      /* coordInitial = coordevento[0].coordinate;
+        
+      var [latitude, longitude] = coordInitial.split(',').map(coord => parseFloat(coord.trim())); */
+
+
+      if ("<%= coordevento[0].coordinate %>") {
+        
+        var coordInitial = "<%= coordevento[0].coordinate %>";
+        var [latitude, longitude] = coordInitial.split(',').map(coord => parseFloat(coord.trim()));
+        var map = L.map('map').setView([latitude, longitude], 18);
+
+      }
+
+      else {
+        
+        var coordInitial = "<%= coordevento %>";
+        var [latitude, longitude] = coordInitial.split(',').map(coord => parseFloat(coord.trim()));
+        var map = L.map('map').setView([latitude, longitude], 15);
+
+      }
+
 
       //DECLARACION DE TODOS LOS ICONOS DE LAS MARCAS
 
