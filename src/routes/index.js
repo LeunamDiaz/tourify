@@ -1,8 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const db = require('../services/database');  
-const bcrypt = require('bcrypt');
-const path = require('path');
+const db = require('../services/database'); 
 const passport = require('passport'); //PASSPORT
 
 
@@ -181,7 +179,6 @@ router.post('/register', (req, res) => {
 
   if (!passwordsMatch) {
     contraseñaNoCoincide = true;
-    console.log('Las contraseñas no coinciden');
     return res.render('register', { contraseñaNoCoincide });
   }
 
@@ -216,7 +213,6 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
             try {
               const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
               res.render('index.ejs', { img: img });
-
             } catch (error) {
               throw error;
             }
@@ -244,7 +240,6 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
       const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
 
       const coordevento = (coordinate = "28.643951810520395, -106.0729363634578");
-      console.log(coordevento);
       res.render('map.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns, coordevento: coordevento})
           
     } catch (error) {
@@ -267,8 +262,6 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
 
       const idevento = [req.params.id_evento];
       const coordevento = await db.query('SELECT coordinate FROM events WHERE id_event = ?', [idevento]);
-
-      console.log(coordevento);
 
       res.render('map.ejs', {img: img, events: events, restaurants: restaurants,historicalplaces:historicalplaces, museums: museums, monuments:monuments, theaters: theaters, towns:towns, coordevento: coordevento})
           
@@ -293,7 +286,7 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
     }
   });
 
-  router.get('/model/:id_historical', async(req, res) => {
+  router.get('/model/:id_historical', ensureAuthenticated, async(req, res) => {
 
     try {
       const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
@@ -306,7 +299,7 @@ router.get('/homeu', ensureAuthenticated, async (req, res) => {
 
   });
 
-  router.get('/getachievement/:id_historical', async(req, res) => {
+  router.get('/getachievement/:id_historical', ensureAuthenticated, async(req, res) => {
 
     try {
       const achievementHistorical = req.params.id_historical;
@@ -378,10 +371,8 @@ router.get('/achievements', ensureAuthenticated, async (req,res) => {
 
         const logros = await db.query('CALL getLogros(?, @logros)', [req.user.id_user]);
         const resultado = await db.query('SELECT @logros as logros');
-        console.log(resultado);
         
         const img = await db.query('SELECT name, image, role FROM users WHERE id_user = ?', [req.user.id_user]);
-        console.log(img);
 
         res.render('profile.ejs',{user: user8, img: img, resultado:resultado})
     } catch (error) {
@@ -423,6 +414,22 @@ router.get('/achievements', ensureAuthenticated, async (req,res) => {
     } catch (error) {
       throw error;
     }
+  });
+
+
+  router.get('/deleteprofile', ensureAuthenticated, async (req, res) => {
+
+    try {
+      
+      res.redirect('/logout');
+      await db.query('DELETE FROM users WHERE id_user = ?', [req.user.id_user]);
+
+
+
+    } catch (error) {
+        throw error;
+    }
+
   });
 
   router.post('/editprofile',uploadProfile.single('profileImage'), async (req, res) => {       //Esta parte nomas se alargo por culpa del bug de seleccionar el pais, fue dificil, pero se logró. :´)
@@ -709,18 +716,6 @@ router.get('/support', ensureAuthenticated, async(req, res) => {
   res.render('support.ejs', {img: img, comentarios: comentarios});
 });
 
-router.post('/uploadhistorical/:id_historical', (req, res) => {
-
-});
-
-router.post('/uploadevent/:id_event', (req, res) => {
-
-});
-
-router.post('/uploadrestaurant/:id_restaurant', (req, res) => {
-
-});
-  
 
    //AQUI TERMINA TODO LO DEL ADMIN
 
